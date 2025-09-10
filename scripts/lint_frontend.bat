@@ -1,7 +1,14 @@
 @echo off
 echo [LINT] Executando lint e formatacao no projeto frontend...
 
-cd /d "projects\project_xx\frontend"
+set PROJECT_PATH=%1
+if "%PROJECT_PATH%"=="" (
+    echo [WARNING] Caminho do projeto nao fornecido, usando padrao
+    set PROJECT_PATH=projects\project_xx\frontend
+)
+
+echo [LINT] Executando lint em: %PROJECT_PATH%
+cd /d "%PROJECT_PATH%"
 
 if not exist "node_modules" (
     echo [WARNING] node_modules nao encontrado. Executando npm install...
@@ -21,4 +28,4 @@ if %errorlevel% equ 0 (
 )
 
 echo [LINT] Lint e formatacao concluidos
-cd /d "..\..\..\"
+cd /d "%~dp0.."
