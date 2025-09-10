@@ -3,9 +3,9 @@ from agno.models.google import Gemini
 from agno.tools.file import FileTools
 from pathlib import Path
 
-# Define o caminho do projeto
-PROJECT_PATH = Path("projects") / "project_xx"/  "frontend"
-file_tools=FileTools(base_dir=PROJECT_PATH)
+# Define o caminho do projeto (caminho relativo à raiz do workspace)
+PROJECT_PATH = Path("projects/project_xx/frontend")
+file_tools=FileTools(base_dir=Path("."))
 
 # Inicializa o modelo Gemini
 gemini_model = Gemini("gemini-2.0-flash")
@@ -16,9 +16,10 @@ front_agent = Agent(
     model=gemini_model,
     instructions=[
         "Você é um agente que gera componentes React dentro do projeto.",
-        "Crie arquivos JSX/TSX conforme necessário na pasta: {PROJECT_PATH}/src/components.",
-        "Edite os arquivos necessários em {PROJECT_PATH}.",
+        "Crie arquivos JSX/TSX conforme necessário na pasta: projects/project_xx/frontend/src/components",
+        "Edite os arquivos necessários em projects/project_xx/frontend/",
         "Use FileTools apenas para criar/escrever arquivos dentro do projeto.",
+        "IMPORTANTE: Use sempre caminhos relativos começando com 'projects/project_xx/frontend/'",
         "Retorne sucess ou error no final."
     ],
     tools=[file_tools]

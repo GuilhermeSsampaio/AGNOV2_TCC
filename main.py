@@ -36,23 +36,31 @@ def main(user_input: str):
         
         result = front_agent.run(instruction)
 
-        if result and hasattr(result, 'output'):
+        if result:
             print("[INFO] Agente AGNO completou a geração do front-end.")
-            print(f"[INFO] Resultado: {result.output}")
+            if hasattr(result, 'output') and result.output:
+                print(f"[INFO] Resultado: {result.output}")
+            else:
+                print("[INFO] Agente executou sem retornar output específico.")
         else:
-            print("[WARNING] Resultado vazio ou inválido do agente.")
+            print("[WARNING] Resultado vazio do agente.")
 
     except Exception as e:
         print(f"[ERROR] Erro ao executar front_agent: {e}")
         return
 
-    # 4. Rodar script de lint/prettier
+    # 4. Rodar script de lint/prettier (opcional)
     lint_script = SCRIPTS_PATH / "lint_frontend.bat"
-    try:
-        subprocess.run(str(lint_script), check=True)
-        print("[INFO] Lint e formatação aplicados com sucesso.")
-    except subprocess.CalledProcessError as e:
-        print(f"[WARNING] Lint falhou: {e}")
+    if lint_script.exists():
+        try:
+            subprocess.run(str(lint_script), check=True, shell=True)
+            print("[INFO] Lint e formatação aplicados com sucesso.")
+        except subprocess.CalledProcessError as e:
+            print(f"[WARNING] Lint falhou: {e}")
+        except FileNotFoundError as e:
+            print(f"[WARNING] Script de lint não encontrado: {e}")
+    else:
+        print("[INFO] Script de lint não encontrado, pulando...")
 
     # 5. Mensagem final
     print(f"[DONE] Projeto front-end pronto em {PROJECT_PATH}")
