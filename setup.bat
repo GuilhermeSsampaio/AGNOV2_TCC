@@ -11,6 +11,8 @@ if not exist "%VENV_DIR%" (
 ) else (
     echo Virtual environment found. Activating...
     call "%VENV_DIR%/Scripts/activate.bat"
+    pip install -r requirements.txt
+
 )
 
 :: Run the main script

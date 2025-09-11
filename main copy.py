@@ -2,9 +2,9 @@ import asyncio
 from pathlib import Path
 from utils.timestamp_config import project_timestamp, project_path
 from utils.project_manager import get_current_project_info, create_project_structure, get_project_readme_content
-# from agents.front_agent import generate_frontend
 import subprocess
 from tools.manage_examples import get_relevant_examples
+from agno.os import AgentOS
 
 # Paths usando o project_path do timestamp_config
 PROJECT_PATH = Path(project_path) / "frontend"
@@ -12,6 +12,13 @@ SCRIPTS_PATH = Path("scripts")
 
 # Importar o front_agent após definir PROJECT_PATH
 from agents.front_agent import front_agent
+
+# Criar o AgentOS com o seu front_agent
+agent_os = AgentOS(
+    os_id="frontend-generator-os",
+    description="Sistema de geração de frontend com React e PrimeReact",
+    agents=[front_agent],  # Usar o seu agente existente
+)
 
 def main(user_input: str):
     print(f"[INFO] Criando projeto com timestamp: {project_timestamp}")
@@ -60,9 +67,7 @@ def main(user_input: str):
             for i, example in enumerate(examples, 1):
                 examples_text += f"\n--- EXEMPLO {i} ---\n{example}\n"
         
-        
-        
-        result = front_agent.run(user_input)
+        result = front_agent.run(user_input + examples_text)
 
         if result:
             print("[INFO] Agente AGNO completou a geração do front-end.")
@@ -93,9 +98,13 @@ def main(user_input: str):
     # 5. Mensagem final
     print(f"[DONE] Projeto front-end pronto em {PROJECT_PATH}")
 
+# Obter a aplicação do AgentOS
+app = agent_os.get_app()
 
 if __name__ == "__main__":
-    # user_input = input("Descreva o front-end que deseja gerar: ")
-    user_input = "Aplicativo para cadastrar peças musicais e maestros, maestros cadastram peças musicais,  o app deve cadastrar maestros e peças"
-    main(user_input)
+    # Opção 1: Executar via interface web do AgentOS
+    agent_os.serve(app="main:app", reload=True, port=7777)
     
+    # Opção 2: Executar diretamente (comentado)
+    # user_input = input("Descreva o front-end que deseja gerar: ")
+    # main(user_input)

@@ -5,7 +5,7 @@ front_instructions = [
     f"Crie componentes JSX/TSX na pasta: {project_path}/frontend/src/components",
     f"Edite o App.jsx para integrar os componentes criados",
     f"IMPORTANTE: Use sempre caminhos relativos começando com '{project_path}/frontend/'",
-    
+    "Siga as diretrizes do seu banco dea dados de conhecimento"
     "PRIMEREACT - REGRAS DE USO:",
     "1. SEMPRE importe os componentes do PrimeReact:",
     "   import { Button } from 'primereact/button'",
