@@ -4,6 +4,7 @@ from utils.timestamp_config import project_timestamp, project_path
 from utils.project_manager import get_current_project_info, create_project_structure, get_project_readme_content
 # from agents.front_agent import generate_frontend
 import subprocess
+from tools.manage_examples import get_relevant_examples
 
 # Paths usando o project_path do timestamp_config
 PROJECT_PATH = Path(project_path) / "frontend"
@@ -51,7 +52,6 @@ def main(user_input: str):
     # 3. Passar o input do usuário para o agente AGNO
     try:
         # Buscar exemplos relevantes baseado no prompt do usuário
-        from agents.front_agent import get_relevant_examples
         examples = get_relevant_examples(user_input)
         
         examples_text = ""
@@ -60,44 +60,9 @@ def main(user_input: str):
             for i, example in enumerate(examples, 1):
                 examples_text += f"\n--- EXEMPLO {i} ---\n{example}\n"
         
-        instruction = f"""
-        Você é um agente que gera componentes React BONITOS usando PrimeReact.
         
-        PROMPT DO USUÁRIO: {user_input}
         
-        INSTRUÇÕES:
-        1. Crie componentes JSX/TSX na pasta: {PROJECT_PATH}/src/components
-        2. Edite o App.jsx para integrar os componentes criados
-        3. Use SEMPRE componentes PrimeReact para interfaces modernas
-        4. Siga os padrões dos exemplos abaixo para criar código de qualidade
-        5. Use PrimeFlex para layout responsivo (grid, flex, etc.)
-        6. Adicione ícones com PrimeIcons (pi pi-*)
-        7. Use Cards para organização visual
-        
-        {examples_text}
-        
-        EXEMPLO BASE - LISTA DE MERCADO:
-        O projeto já vem com um exemplo de lista de mercado funcional no App.jsx.
-        Use esse padrão como base e adapte para o que o usuário pediu.
-        
-        COMPONENTES PRIMEREACT MAIS USADOS:
-        - Card: para agrupar conteúdo
-        - DataTable + Column: para listas e tabelas
-        - Button: botões com ícones
-        - InputText: campos de entrada
-        - Dropdown: seleção de opções
-        - Badge: status e indicadores
-        - Toast: notificações
-        
-        IMPORTANTE: 
-        - Crie componentes visualmente atraentes
-        - Use os exemplos como referência de boas práticas
-        - Aplique layout responsivo com PrimeFlex
-        - Mantenha a funcionalidade da lista de mercado como base
-        - Retorne sucesso ou erros no final
-        """
-        
-        result = front_agent.run(instruction)
+        result = front_agent.run(user_input)
 
         if result:
             print("[INFO] Agente AGNO completou a geração do front-end.")
