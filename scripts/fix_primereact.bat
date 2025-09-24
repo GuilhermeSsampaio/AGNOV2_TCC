@@ -17,7 +17,7 @@ if not exist "package.json" (
 )
 
 echo [INFO] Instalando PrimeReact e dependencias...
-npm install primereact primeicons primeflex react-icons
+npm install primereact primeicons primeflex react-icons dotenv react-router-dom axios
 if %errorlevel% neq 0 (
     echo [ERROR] Falha ao instalar PrimeReact
     exit /b 1

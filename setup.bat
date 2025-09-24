@@ -16,5 +16,11 @@ if not exist "%VENV_DIR%" (
 )
 
 :: Run the main script
+echo Building Docker containers...
+docker-compose build
+
+echo Starting Docker containers...
+docker-compose up -d
+
 echo Running main.py...
 python main.py

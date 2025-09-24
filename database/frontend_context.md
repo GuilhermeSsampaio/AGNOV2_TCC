@@ -56,7 +56,7 @@ As especificações fornecidas são a única fonte de verdade. Não adicione fun
 const handleButtonClick = () => {
   doSomething();
 };
-<Button onClick={handleButtonClick} />;
+<Button onClick={handleButtonClick} />; 
 ```
 
 ### 2. Gerenciamento de Estado
