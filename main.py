@@ -4,6 +4,9 @@ from utils.timestamp_config import project_timestamp, project_path
 from utils.project_manager import get_current_project_info, create_project_structure, get_project_readme_content
 # from agents.front_agent import generate_frontend
 import subprocess
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Paths usando o project_path do timestamp_config
 PROJECT_PATH = Path(project_path) / "frontend"
