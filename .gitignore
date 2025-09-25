@@ -3,3 +3,5 @@ projects/
 vector_db
 *__pycache__
 .env
+
+node_modules
