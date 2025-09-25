@@ -1,5 +1,5 @@
 @echo off
-REM Inicializa projeto React + Vite e instala PrimeReact
+REM Inicializa projeto React + Create React App e instala PrimeReact
 REM Aceita o caminho do projeto como parâmetro
 set PROJECT_PATH=%1
 if "%PROJECT_PATH%"=="" (
@@ -10,10 +10,10 @@ if "%PROJECT_PATH%"=="" (
 echo [INFO] Inicializando projeto em: %PROJECT_PATH%
 cd /d "%PROJECT_PATH%"
 
-echo [INFO] Criando projeto Vite...
-npx create-vite . --template react --yes
+echo [INFO] Criando projeto Create React App...
+npx create-react-app .
 if %errorlevel% neq 0 (
-    echo [ERROR] Falha ao criar projeto Vite
+    echo [ERROR] Falha ao criar projeto Create React App
     exit /b 1
 )
 

@@ -11,8 +11,16 @@ if not exist "%VENV_DIR%" (
 ) else (
     echo Virtual environment found. Activating...
     call "%VENV_DIR%/Scripts/activate.bat"
+    pip install -r requirements.txt
+
 )
 
 :: Run the main script
+echo Building Docker containers...
+docker-compose build
+
+echo Starting Docker containers...
+docker-compose up -d
+
 echo Running main.py...
 python main.py
