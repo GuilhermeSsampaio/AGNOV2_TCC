@@ -46,6 +46,8 @@ entrada (json: layout, tema, serviços -> em qual evento são chamados, componen
 entrada -> json
 scripts -> IA (entrada -> front) -> projeto gerado
 scripts -> IA (entrada -> back) -> projeto gerado
+
+instruções -> padrões de criptografia, bibliotecas como o uso de prime react, TypeORM, e similares.
 ```
 
 exemplo de json:
@@ -161,4 +163,14 @@ exemplo de json:
 ```
 
 Objetivo atual:
-Gerar o cadastro do usuário igual no projeto de LP
+Gerar o cadastro do usuário igual no projeto de LP, primeiramente sem o modal de confirmação e ligado ao backend
+Num primeiro momento deixar o evento para o programador programar
+
+p/ semana q vem:
+
+| **Tarefa**                    | **Descrição**                                                                              | **Responsável** |
+| ----------------------------- | ------------------------------------------------------------------------------------------ | --------------- |
+| **Gerar Cadastro do Usuário** | Criar o cadastro do usuário igual ao projeto de LP, inicialmente sem modal de confirmação. | [Ambos]         |
+| **Conectar ao Backend**       | Ligar o cadastro ao backend, deixando os eventos para o programador implementar.           | [Guilherme]     |
+| **Boilerplate do Pedro**      | Finalizar boilerplate, pelo menos da parte do usuário,                                     | [Pedro]         |
+| **JSON Proposto**             | Mapear os serviços chamados nas páginas, verificações e integração com o backend.          | [Guilherme]     |
