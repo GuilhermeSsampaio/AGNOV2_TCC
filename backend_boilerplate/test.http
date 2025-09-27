@@ -1,0 +1,56 @@
+### Verificar se CPF já existe
+POST http://localhost:3333/usuarios/verificar-cpf/12345678900
+
+### Listar todos os usuários
+GET http://localhost:3333/usuarios
+
+### Cadastrar novo usuário
+POST http://localhost:3333/usuarios/cadastrar
+Content-Type: application/json
+
+{
+  "cpf": "12345678900",
+  "nome": "Teste Usuário",
+  "perfil": "MAESTRO",
+  "email": "teste@exemplo.com",
+  "senha": "senha123",
+  "questão": "Nome do seu animal de estimação?",
+  "resposta": "Rex"
+}
+
+### Login de usuário
+POST http://localhost:3333/usuarios/login
+Content-Type: application/json
+
+{
+  "nome_login": "12345678900",
+  "senha": "senha123"
+}
+
+### Alterar dados do usuário
+PATCH http://localhost:3333/usuarios/alterar-usuario
+Content-Type: application/json
+Authorization: Bearer seu_token_aqui
+
+{
+  "cpf": "12345678900",
+  "email": "novoemail@exemplo.com"
+}
+
+### Remover usuário
+DELETE http://localhost:3333/usuarios/12345678900
+Authorization: Bearer seu_token_aqui
+
+### Buscar questão de segurança
+GET http://localhost:3333/usuarios/questao/12345678900
+
+### Verificar resposta de segurança
+POST http://localhost:3333/usuarios/verificar-resposta
+Content-Type: application/json
+
+{
+  "cpf": "12345678900",
+  "resposta": "Rex"
+}
+  "resposta": "Rex"
+}

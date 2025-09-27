@@ -34,6 +34,47 @@
 
 ---
 
+## Fluxo de Criação do Backend
+
+1. **Criar Estrutura de Diretórios**  
+   Utilizar Python para criar a estrutura de diretórios necessária para o backend.
+
+2. **Clonar o Boilerplate**  
+   Utilizar Python para clonar o boilerplate do backend e colocá-lo na pasta do projeto.
+
+3. **Configurar o Backend**
+
+   - Executar o script `init_backend.bat` para configurar o backend.
+   - Instalar dependências necessárias (Express, TypeORM, etc.).
+
+4. **Gerar Código do Backend**
+
+   - O agente de backend deve:
+     - Criar as entidades no diretório `src/entities/`.
+     - Criar os repositórios no diretório `src/repositories/`.
+     - Criar os serviços no diretório `src/services/`.
+     - Criar os controladores no diretório `src/controllers/`.
+     - Criar as rotas no diretório `src/routes/`.
+
+5. **Configurar Banco de Dados**
+
+   - Configurar o TypeORM para conectar ao banco de dados especificado no `.env`.
+   - Criar migrações para as entidades geradas.
+
+6. **Implementar Segurança**
+
+   - Adicionar autenticação baseada em JWT.
+   - Implementar validação de dados com class-validator.
+   - Criar middlewares para autenticação e tratamento de erros.
+
+7. **Testar o Backend**
+
+   - Testar todas as rotas e funcionalidades geradas.
+   - Garantir que o backend esteja alinhado com o frontend.
+
+8. **Finalizar e Informar Sucesso**  
+   Retornar uma mensagem informando que o backend foi gerado com sucesso.
+
 ## Fluxo de Entrada e Processamento
 
 ```plaintext
