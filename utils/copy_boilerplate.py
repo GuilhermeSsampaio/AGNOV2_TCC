@@ -2,7 +2,7 @@
 from pathlib import Path
 import shutil
 
-def clone_boilerplate(project_path: Path, boilerplate_path: Path = Path("boilerplate")):
+def clone_boilerplate(project_path: Path, boilerplate_path: Path = Path("boilerplates")):
     """
     Clona o boilerplate (projeto base) para o novo projeto, ignorando a pasta node_modules.
     """
@@ -14,7 +14,7 @@ def clone_boilerplate(project_path: Path, boilerplate_path: Path = Path("boilerp
             return contents
         return []
 
-    print("Clonando boilerplate...")
+    print("Clonando boilerplate (de 'boilerplates')...")
     shutil.copytree(boilerplate_path, project_path, dirs_exist_ok=True, ignore=ignore_node_modules)
 
     return {
@@ -23,21 +23,5 @@ def clone_boilerplate(project_path: Path, boilerplate_path: Path = Path("boilerp
         "destination": str(project_path)
     }
 
-from pathlib import Path
-import shutil
 
-def clone_backend_boilerplate(project_path: Path, boilerplate_path: Path = Path("boilerplate/backend")):
-    """
-    Clona o boilerplate do backend para o novo projeto.
-    """
-    if not boilerplate_path.exists():
-        raise FileNotFoundError(f"Boilerplate do backend não encontrado em: {boilerplate_path}")
 
-    print("Clonando boilerplate do backend...")
-    shutil.copytree(boilerplate_path, project_path, dirs_exist_ok=True)
-
-    return {
-        "success": True,
-        "cloned_from": str(boilerplate_path),
-        "destination": str(project_path)
-    }

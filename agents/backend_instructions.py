@@ -10,6 +10,7 @@ backend_instructions = [
     "Escreva strings, variaveis, todo o codigo em portugues mas nao use caracters especiais como acentos e etc"
     # "Implemente autenticacao baseada em JWT para proteger endpoints.",
     # "Valide os dados de entrada usando class-validator.",
+    "Não use class validator"
     "Crie middlewares para tratamento de erros e autenticacao.",
     "Seja atento quando for importar modulos, para fazer corretamente"
     "Use variaveis de ambiente para configuracoes sensiveis, como credenciais do banco de dados.",

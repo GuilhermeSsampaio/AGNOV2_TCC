@@ -1,0 +1,159 @@
+{
+  "nome_projeto": "SistemaDePecasMusicais",
+  "frontend": {
+    "framework": "React com PrimeReact",
+    "layout": {
+      "header": {
+        "title": "Sistema de Cadastro de Peças Musicais",
+        "logo": "logo.png",
+        "menu": ["Dashboard", "Maestros", "Peças Musicais", "Configurações"]
+      },
+      "sidebar": {
+        "items": [
+          { "label": "Dashboard", "icon": "pi pi-home", "route": "/dashboard" },
+          { "label": "Maestros", "icon": "pi pi-users", "route": "/maestros" },
+          {
+            "label": "Peças Musicais",
+            "icon": "pi pi-music",
+            "route": "/pecas"
+          },
+          {
+            "label": "Configurações",
+            "icon": "pi pi-cog",
+            "route": "/configuracoes"
+          }
+        ]
+      }
+    },
+    "theme": {
+      "primaryColor": "#007bff",
+      "secondaryColor": "#6c757d",
+      "fontFamily": "Arial, sans-serif"
+    },
+    "services": {
+      "apiBaseUrl": "/api",
+      "endpoints": {
+        "getMaestros": {
+          "url": "/maestros",
+          "method": "GET",
+          "events": ["onPageLoad", "onRefreshButtonClick"]
+        },
+        "getPecas": {
+          "url": "/pecas",
+          "method": "GET",
+          "events": ["onPageLoad", "onRefreshButtonClick"]
+        },
+        "createMaestro": {
+          "url": "/maestros",
+          "method": "POST",
+          "events": ["onSubmitForm"]
+        },
+        "createPeca": {
+          "url": "/pecas",
+          "method": "POST",
+          "events": ["onSubmitForm"]
+        }
+      }
+    },
+    "components": {
+      "dashboard": {
+        "cards": [
+          {
+            "title": "Total de Maestros",
+            "valueSource": "getMaestros.length",
+            "icon": "pi pi-users"
+          },
+          {
+            "title": "Total de Peças Musicais",
+            "valueSource": "getPecas.length",
+            "icon": "pi pi-music"
+          }
+        ]
+      },
+      "forms": {
+        "maestroForm": {
+          "fields": [
+            {
+              "name": "nome",
+              "type": "text",
+              "label": "Nome do Maestro",
+              "required": true
+            },
+            {
+              "name": "email",
+              "type": "email",
+              "label": "Email",
+              "required": true
+            }
+          ],
+          "submitEvent": "createMaestro"
+        },
+        "pecaForm": {
+          "fields": [
+            {
+              "name": "titulo",
+              "type": "text",
+              "label": "Título da Peça",
+              "required": true
+            },
+            {
+              "name": "compositor",
+              "type": "text",
+              "label": "Compositor",
+              "required": true
+            }
+          ],
+          "submitEvent": "createPeca"
+        }
+      }
+    },
+    "navigation": {
+      "routes": [
+        { "path": "/dashboard", "component": "Dashboard" },
+        { "path": "/maestros", "component": "Maestros" },
+        { "path": "/pecas", "component": "Pecas" },
+        { "path": "/configuracoes", "component": "Configuracoes" }
+      ]
+    }
+  },
+  "backend": {
+    "framework": "Node.js com Express",
+    "database": {
+      "type": "MongoDB",
+      "models": {
+        "Maestro": {
+          "nome": { "type": "String", "required": true },
+          "email": { "type": "String", "required": true, "unique": true }
+        },
+        "PecaMusical": {
+          "titulo": { "type": "String", "required": true },
+          "compositor": { "type": "String", "required": true }
+        }
+      }
+    },
+    "endpoints": [
+      {
+        "route": "/api/maestros",
+        "method": "GET",
+        "action": "Retorna todos os maestros"
+      },
+      {
+        "route": "/api/maestros",
+        "method": "POST",
+        "action": "Cria um novo maestro",
+        "body": ["nome", "email"]
+      },
+      {
+        "route": "/api/pecas",
+        "method": "GET",
+        "action": "Retorna todas as peças musicais"
+      },
+      {
+        "route": "/api/pecas",
+        "method": "POST",
+        "action": "Cria uma nova peça musical",
+        "body": ["titulo", "compositor"]
+      }
+    ]
+  }
+}

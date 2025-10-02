@@ -11,13 +11,13 @@ PROJECT_PATH = Path(project_path) / "frontend"
 SCRIPTS_PATH = Path("scripts")
 
 # Importar o front_agent após definir PROJECT_PATH
-from agents.front_agent import front_agent
+from agents.frontend_agent import frontend_agent
 
 # Criar o AgentOS com o seu front_agent
 agent_os = AgentOS(
     os_id="frontend-generator-os",
     description="Sistema de geração de frontend com React e PrimeReact",
-    agents=[front_agent],  # Usar o seu agente existente
+    agents=[frontend_agent],  # Usar o seu agente existente
 )
 
 def main(user_input: str):
@@ -67,7 +67,7 @@ def main(user_input: str):
             for i, example in enumerate(examples, 1):
                 examples_text += f"\n--- EXEMPLO {i} ---\n{example}\n"
         
-        result = front_agent.run(user_input + examples_text)
+        result = frontend_agent.run(user_input + examples_text)
 
         if result:
             print("[INFO] Agente AGNO completou a geração do front-end.")

@@ -9,4 +9,3 @@ AGNO_PROJECT_SCHEMA = os.getenv("AGNO_PROJECT_SCHEMA", "frontend")
 # AGNO_GEMINI_ID = os.getenv("AGNO_GEMINI_ID", "gemini-1.5-flash-latest")
 AGNO_GEMINI_ID = os.getenv("AGNO_GEMINI_ID", "gemini-2.0-flash")
 AGNO_EMBEDDER_ID = os.getenv("AGNO_EMBEDDER_ID", "all-MiniLM-L6-v2")
-

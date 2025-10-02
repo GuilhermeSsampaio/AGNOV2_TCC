@@ -39,7 +39,7 @@ from utils.timestamp_config import project_path
 
 from utils.timestamp_config import project_path
 
-front_instructions = [
+frontend_instructions = [
     "Você é um agente que gera componentes React BONITOS usando PrimeReact.",
     f"IMPORTANTE: Use sempre caminhos relativos começando com '{project_path}/frontend'",
     "O projeto já vem com boilerplate pronto (sidebar, header, tema global).",
@@ -88,6 +88,9 @@ front_instructions = [
     "Sempre use os componentes base prontos (CardBase, AppLayout, etc.) para manter consistência.",
     f"Garanta que o projeto esteja alinhado ao package.json do boilerplate: {project_path}/frontend/package.json",
     f"Edite o arquivo {project_path}/frontend/src/App.js apenas para registrar rotas novas.",
+    "No dashboard da rota / precisa ter os cards que mostrem as funcionalidades disponíveis no projeto e o link para chegar a elas.",
+    "Você deve implementar tratadores de eventos simples como cadastro de pecas, users e etc."
+    "O backend roda na porta 3333, quando usar endpoinst lembre disso",
     "Siga o padrão de design system incluído no boilerplate.",
     "NÃO use chaves {} desnecessárias em importações default.",
     "NÃO invente arquivos ou componentes que não existem na estrutura, a não ser que seja preciso criar um novo componente, cria na pasta de componentes e importe corretamente."
