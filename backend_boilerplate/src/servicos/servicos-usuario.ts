@@ -20,7 +20,7 @@ export default class ServicosUsuario {
       const usuario = await Usuario.findOne(cpf_encriptado);
       console.log("cpf", cpf_encriptado);
       if (usuario)
-        return response.status(400).json({ erro: "CPF já cadastrado." });
+        return response.status(400).json({ erro: "CPF ja cadastrado." });
       else return response.json();
     } catch (error) {
       return response
@@ -61,50 +61,50 @@ export default class ServicosUsuario {
     try {
       const { nome_login, senha } = request.body;
       const cpf_encriptado = md5(nome_login);
-      const usuário = await Usuario.findOne(cpf_encriptado);
-      if (!usuário)
+      const usuario = await Usuario.findOne(cpf_encriptado);
+      if (!usuario)
         return response
           .status(404)
-          .json({ erro: "Nome de usuário não cadastrado." });
+          .json({ erro: "Nome de usuario não cadastrado." });
       const cadastro_completo = await ServicosUsuario.verificarCadastroCompleto(
-        usuário
+        usuario
       );
       if (!cadastro_completo) {
-        await Usuario.remove(usuário);
+        await Usuario.remove(usuario);
         return response.status(400).json({
           erro: "Cadastro incompleto. Por favor, realize o cadastro novamente.",
         });
       }
 
-      const senha_correta = await bcrypt.compare(senha, usuário.senha);
+      const senha_correta = await bcrypt.compare(senha, usuario.senha);
       if (!senha_correta)
         return response.status(401).json({ erro: "Senha incorreta." });
       const token = sign(
-        { perfil: usuário.perfil, email: usuário.email },
+        { perfil: usuario.perfil, email: usuario.email },
         SENHA_JWT,
-        { subject: usuário.nome, expiresIn: "1d" }
+        { subject: usuario.nome, expiresIn: "1d" }
       );
       return response.json({
-        usuárioLogado: {
-          nome: usuário.nome,
-          perfil: usuário.perfil,
-          email: usuário.email,
-          questao: usuário.questao,
-          status: usuário.status,
-          cor_tema: usuário.cor_tema,
+        usuarioLogado: {
+          nome: usuario.nome,
+          perfil: usuario.perfil,
+          email: usuario.email,
+          questao: usuario.questao,
+          status: usuario.status,
+          cor_tema: usuario.cor_tema,
           token,
         },
       });
     } catch (error) {
-      return response.status(500).json({ erro: "Erro BD: logarUsuário" });
+      return response.status(500).json({ erro: "Erro BD: logarUsuario" });
     }
   }
 
   static async cadastrarUsuario(request, response) {
     try {
-      const usuário_informado = request.body;
+      const usuario_informado = request.body;
       const { cpf, nome, perfil, email, senha, questao, resposta, cor_tema } =
-        usuário_informado;
+        usuario_informado;
       if (
         !cpf ||
         !nome ||
@@ -115,14 +115,14 @@ export default class ServicosUsuario {
         !resposta
       ) {
         return response.status(400).json({
-          erro: "Campos obrigatórios faltando no cadastro do usuário.",
+          erro: "Campos obrigatórios faltando no cadastro do usuario.",
         });
       }
-      console.log("ServiçosUsuário.cadastrarUsuário:nome -- " + nome);
+      console.log("ServicosUsuario.cadastrarUsuario:nome -- " + nome);
       const cpf_encriptado = md5(cpf);
       const senha_encriptada = await bcrypt.hash(senha, SALT);
       const resposta_encriptada = await bcrypt.hash(resposta, SALT);
-      const usuário = Usuario.create({
+      const usuario = Usuario.create({
         cpf: cpf_encriptado,
         nome,
         perfil,
@@ -132,17 +132,17 @@ export default class ServicosUsuario {
         resposta: resposta_encriptada,
         cor_tema,
       });
-      await Usuario.save(usuário);
+      await Usuario.save(usuario);
       const token = sign(
-        { perfil: usuário.perfil, email: usuário.email },
+        { perfil: usuario.perfil, email: usuario.email },
         SENHA_JWT,
-        { subject: usuário.nome, expiresIn: "1d" }
+        { subject: usuario.nome, expiresIn: "1d" }
       );
-      return response.json({ usuário, token });
+      return response.json({ usuario, token });
     } catch (error) {
       return response
         .status(500)
-        .json({ erro: "Erro BD: cadastrarUsuário: " + error.message });
+        .json({ erro: "Erro BD: cadastrarUsuario: " + error.message });
     }
   }
   static async alterarUsuario(request, response) {
@@ -151,38 +151,38 @@ export default class ServicosUsuario {
       const cpf_encriptado = md5(cpf);
       let senha_encriptada: string, resposta_encriptada: string;
       let token: string;
-      const usuário = await Usuario.findOne(cpf_encriptado);
+      const usuario = await Usuario.findOne(cpf_encriptado);
       if (email) {
-        usuário.email = email;
-        token = sign({ perfil: usuário.perfil, email }, SENHA_JWT, {
-          subject: usuário.nome,
+        usuario.email = email;
+        token = sign({ perfil: usuario.perfil, email }, SENHA_JWT, {
+          subject: usuario.nome,
           expiresIn: "1d",
         });
       }
-      if (cor_tema) usuário.cor_tema = cor_tema;
+      if (cor_tema) usuario.cor_tema = cor_tema;
       if (senha) {
         senha_encriptada = await bcrypt.hash(senha, SALT);
-        usuário.senha = senha_encriptada;
+        usuario.senha = senha_encriptada;
       }
       if (resposta) {
         resposta_encriptada = await bcrypt.hash(resposta, SALT);
-        usuário.questao = questao;
-        usuário.resposta = resposta_encriptada;
+        usuario.questao = questao;
+        usuario.resposta = resposta_encriptada;
       }
-      await Usuario.save(usuário);
-      const usuário_info = {
-        nome: usuário.nome,
-        perfil: usuário.perfil,
-        email: usuário.email,
-        questao: usuário.questao,
-        status: usuário.status,
-        cor_tema: usuário.cor_tema,
+      await Usuario.save(usuario);
+      const usuario_info = {
+        nome: usuario.nome,
+        perfil: usuario.perfil,
+        email: usuario.email,
+        questao: usuario.questao,
+        status: usuario.status,
+        cor_tema: usuario.cor_tema,
         token: null,
       };
-      if (token) usuário_info.token = token;
-      return response.json(usuário_info);
+      if (token) usuario_info.token = token;
+      return response.json(usuario_info);
     } catch (error) {
-      return response.status(500).json({ erro: "Erro BD: alterarUsuário" });
+      return response.status(500).json({ erro: "Erro BD: alterarUsuario" });
     }
   }
 
@@ -191,41 +191,41 @@ export default class ServicosUsuario {
       const cpf_encriptado = md5(request.params.cpf);
       const entityManager = getManager();
       await entityManager.transaction(async (transactionManager) => {
-        const usuário = await transactionManager.findOne(
+        const usuario = await transactionManager.findOne(
           Usuario,
           cpf_encriptado
         );
-        await transactionManager.remove(usuário);
+        await transactionManager.remove(usuario);
         return response.json();
       });
     } catch (error) {
-      return response.status(500).json({ erro: "Erro BD: removerUsuário" });
+      return response.status(500).json({ erro: "Erro BD: removerUsuario" });
     }
   }
   static async buscarQuestaoSeguranca(request, response) {
     try {
       const cpf_encriptado = md5(request.params.cpf);
-      const usuário = await Usuario.findOne(cpf_encriptado);
-      if (usuário) return response.json({ questao: usuário.questao });
+      const usuario = await Usuario.findOne(cpf_encriptado);
+      if (usuario) return response.json({ questao: usuario.questao });
       else return response.status(404).json({ mensagem: "CPF não cadastrado" });
     } catch (error) {
       return response
         .status(500)
-        .json({ erro: "Erro BD : buscarquestaoSegurança" });
+        .json({ erro: "Erro BD : buscarquestaoSeguranca" });
     }
   }
   static async verificarRespostaCorreta(request, response) {
     try {
       const { cpf, resposta } = request.body;
       const cpf_encriptado = md5(cpf);
-      const usuário = await Usuario.findOne(cpf_encriptado);
-      const resposta_correta = await bcrypt.compare(resposta, usuário.resposta);
+      const usuario = await Usuario.findOne(cpf_encriptado);
+      const resposta_correta = await bcrypt.compare(resposta, usuario.resposta);
       if (!resposta_correta)
         return response.status(401).json({ mensagem: "Resposta incorreta." });
       const token = sign(
-        { perfil: usuário.perfil, email: usuário.email },
+        { perfil: usuario.perfil, email: usuario.email },
         process.env.SENHA_JWT,
-        { subject: usuário.nome, expiresIn: "1h" }
+        { subject: usuario.nome, expiresIn: "1h" }
       );
       return response.json({ token });
     } catch (error) {
