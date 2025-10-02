@@ -33,7 +33,7 @@ export enum Cores {
 // falta ver se os atributos estão certros
 
 @Entity()
-export default class Usuário extends BaseEntity {
+export default class Usuario extends BaseEntity {
   @PrimaryColumn()
   cpf: string;
 
@@ -53,7 +53,7 @@ export default class Usuário extends BaseEntity {
   senha: string;
 
   @Column()
-  questão: string;
+  questao: string;
 
   @Column()
   resposta: string;
@@ -62,5 +62,5 @@ export default class Usuário extends BaseEntity {
   cor_tema: string;
 
   @CreateDateColumn()
-  data_criação: Date;
+  data_criacao: Date;
 }

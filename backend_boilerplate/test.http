@@ -14,7 +14,7 @@ Content-Type: application/json
   "perfil": "MAESTRO",
   "email": "teste@exemplo.com",
   "senha": "senha123",
-  "questão": "Nome do seu animal de estimação?",
+  "questao": "Nome do seu animal de estimação?",
   "resposta": "Rex"
 }
 
@@ -41,7 +41,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJmaWwiOiJtYWVzd
 DELETE http://localhost:3333/usuarios/12345678900
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJmaWwiOiJtYWVzdHJvIiwiZW1haWwiOiJ0ZXN0ZUBleGVtcGxvLmNvbSIsImlhdCI6MTc1OTAwMjg0NywiZXhwIjoxNzU5MDg5MjQ3LCJzdWIiOiJUZXN0ZSBVc3XDoXJpbyJ9.8_p9HaZ7LZWad4tCyVKKq_EWKo7Eq7LRlk_BfU8BjzE
 
-### Buscar questão de segurança
+### Buscar questao de segurança
 GET http://localhost:3333/usuarios/questao/12345678900
 
 ### Verificar resposta de segurança
