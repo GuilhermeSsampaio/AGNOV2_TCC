@@ -30,7 +30,7 @@ Content-Type: application/json
 ### Alterar dados do usuário
 PATCH http://localhost:3333/usuarios/alterar-usuario
 Content-Type: application/json
-Authorization: Bearer seu_token_aqui
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJmaWwiOiJtYWVzdHJvIiwiZW1haWwiOiJ0ZXN0ZUBleGVtcGxvLmNvbSIsImlhdCI6MTc1OTAwMjg0NywiZXhwIjoxNzU5MDg5MjQ3LCJzdWIiOiJUZXN0ZSBVc3XDoXJpbyJ9.8_p9HaZ7LZWad4tCyVKKq_EWKo7Eq7LRlk_BfU8BjzE
 
 {
   "cpf": "12345678900",
@@ -39,7 +39,7 @@ Authorization: Bearer seu_token_aqui
 
 ### Remover usuário
 DELETE http://localhost:3333/usuarios/12345678900
-Authorization: Bearer seu_token_aqui
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJmaWwiOiJtYWVzdHJvIiwiZW1haWwiOiJ0ZXN0ZUBleGVtcGxvLmNvbSIsImlhdCI6MTc1OTAwMjg0NywiZXhwIjoxNzU5MDg5MjQ3LCJzdWIiOiJUZXN0ZSBVc3XDoXJpbyJ9.8_p9HaZ7LZWad4tCyVKKq_EWKo7Eq7LRlk_BfU8BjzE
 
 ### Buscar questão de segurança
 GET http://localhost:3333/usuarios/questao/12345678900
@@ -52,5 +52,4 @@ Content-Type: application/json
   "cpf": "12345678900",
   "resposta": "Rex"
 }
-  "resposta": "Rex"
-}
+ 
