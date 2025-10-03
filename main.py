@@ -8,8 +8,8 @@ from tasks.setup_task import setup_task
 from utils.timestamp_config import project_path
 from utils.project_manager import create_project_structure, get_project_readme_content
 from utils.copy_boilerplate import clone_boilerplate
-from agents.frontend_agent import frontend_agent
-from agents.backend_agent import backend_agent
+from agents.frontend_agent import frontend_agent, frontend_file_tools
+from agents.backend_agent import backend_agent, backend_file_tools
 import time
 import sys
 import subprocess
@@ -46,6 +46,12 @@ def run_agents(shared: dict):
         frontend_agent.run(frontend_prompt)
     except Exception as e:
         logging.warning("frontend_agent.run falhou: %s", e)
+    finally:
+        try:
+            flush_result = frontend_file_tools.flush()
+            logging.info("Frontend buffer: %s", flush_result)
+        except Exception as flush_error:
+            logging.warning("Falha ao aplicar buffer do frontend: %s", flush_error)
 
     # 2) Orquestrador (local)
     # Agente local que inspeciona o resultado do frontend (ou sua spec)
@@ -73,6 +79,12 @@ def run_agents(shared: dict):
         backend_agent.run(backend_prompt)
     except Exception as e:
         logging.warning("backend_agent.run falhou: %s", e)
+    finally:
+        try:
+            flush_result = backend_file_tools.flush()
+            logging.info("Backend buffer: %s", flush_result)
+        except Exception as flush_error:
+            logging.warning("Falha ao aplicar buffer do backend: %s", flush_error)
 
 def main():
     parser = argparse.ArgumentParser()
