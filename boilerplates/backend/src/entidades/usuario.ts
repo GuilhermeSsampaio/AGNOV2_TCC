@@ -8,8 +8,8 @@ import {
 } from "typeorm";
 
 export enum Perfil {
-  PATROCINADOR = "patrocinador",
-  MAESTRO = "maestro",
+  USUARIO = "usuario",
+  ADMINISTRADOR = "administrador",
 }
 
 export enum Status {
@@ -30,17 +30,16 @@ export enum Cores {
   VERDE = "green",
   VERDE_AZULADO = "teal",
 }
-// falta ver se os atributos estão certros
 
 @Entity()
 export default class Usuario extends BaseEntity {
   @PrimaryColumn()
   cpf: string;
 
-  @Column({ type: "enum", enum: Perfil })
+  @Column({ type: "enum", enum: Perfil, default: Perfil.USUARIO })
   perfil: Perfil;
 
-  @Column({ type: "enum", enum: Status, default: Status.PENDENTE })
+  @Column({ type: "enum", enum: Status, default: Status.ATIVO })
   status: Status;
 
   @Column()
@@ -58,7 +57,7 @@ export default class Usuario extends BaseEntity {
   @Column()
   resposta: string;
 
-  @Column({ type: "enum", enum: Cores })
+  @Column({ type: "enum", enum: Cores, default: Cores.CINZA_ESCURO })
   cor_tema: string;
 
   @CreateDateColumn()

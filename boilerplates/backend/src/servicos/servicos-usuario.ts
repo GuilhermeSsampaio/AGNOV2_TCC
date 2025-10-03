@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import md5 from "md5";
 import { sign } from "jsonwebtoken";
-import Usuario, { Perfil } from "../entidades/usuario";
+import Usuario, { Cores, Perfil, Status } from "../entidades/usuario";
 
 import { getManager } from "typeorm";
 
@@ -79,6 +79,10 @@ export default class ServicosUsuario {
       const senha_correta = await bcrypt.compare(senha, usuario.senha);
       if (!senha_correta)
         return response.status(401).json({ erro: "Senha incorreta." });
+      if (usuario.status === Status.PENDENTE) {
+        usuario.status = Status.ATIVO;
+        await Usuario.save(usuario);
+      }
       const token = sign(
         { perfil: usuario.perfil, email: usuario.email },
         SENHA_JWT,
@@ -103,17 +107,19 @@ export default class ServicosUsuario {
   static async cadastrarUsuario(request, response) {
     try {
       const usuario_informado = request.body;
-      const { cpf, nome, perfil, email, senha, questao, resposta, cor_tema } =
-        usuario_informado;
-      if (
-        !cpf ||
-        !nome ||
-        !perfil ||
-        !email ||
-        !senha ||
-        !questao ||
-        !resposta
-      ) {
+      const {
+        cpf,
+        nome,
+        perfil: perfilInformado,
+        email,
+        senha,
+        questao,
+        resposta,
+        cor_tema: corTemaInformado,
+      } = usuario_informado;
+      const perfil = perfilInformado ?? Perfil.USUARIO;
+      const cor_tema = corTemaInformado ?? Cores.CINZA_ESCURO;
+      if (!cpf || !nome || !email || !senha || !questao || !resposta) {
         return response.status(400).json({
           erro: "Campos obrigatórios faltando no cadastro do usuario.",
         });
@@ -131,14 +137,24 @@ export default class ServicosUsuario {
         questao,
         resposta: resposta_encriptada,
         cor_tema,
+        status: Status.ATIVO,
       });
-      await Usuario.save(usuario);
+      const usuarioSalvo = await Usuario.save(usuario);
       const token = sign(
         { perfil: usuario.perfil, email: usuario.email },
         SENHA_JWT,
         { subject: usuario.nome, expiresIn: "1d" }
       );
-      return response.json({ usuario, token });
+      const usuarioResposta = {
+        cpf,
+        nome: usuarioSalvo.nome,
+        perfil: usuarioSalvo.perfil,
+        email: usuarioSalvo.email,
+        questao: usuarioSalvo.questao,
+        status: usuarioSalvo.status,
+        cor_tema: usuarioSalvo.cor_tema,
+      };
+      return response.json({ usuario: usuarioResposta, token });
     } catch (error) {
       return response
         .status(500)

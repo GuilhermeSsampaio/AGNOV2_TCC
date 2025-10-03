@@ -8,7 +8,7 @@ from utils.buffered_file_tools import BufferedFileTools
 # from .local_model_config import local_model
 # from database.manage_context import context_base
 # Define o caminho do projeto usando timestamp
-PROJECT_PATH = Path(f"{project_path}/backend")
+PROJECT_PATH = Path(f"{project_path}")
 backend_file_tools = BufferedFileTools(base_dir=PROJECT_PATH)
 
 # Inicializa o modelo Gemini

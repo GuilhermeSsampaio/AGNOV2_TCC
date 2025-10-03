@@ -15,8 +15,8 @@ def main():
     if not project_path.exists():
         print(f"[WARNING] Caminho não encontrado: {project_path} (tentar criar/continuar...)")
 
-    print("[INIT] Executando npm install...")
-    run(["npm", "install"], project_path)
+    # print("[INIT] Executando npm install...")
+    # run(["npm", "install", "--force"], project_path)
 
     # Não executar build aqui - apenas instalar dependências.
     # Se for necessário um build, execute manualmente após validação.

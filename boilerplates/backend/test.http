@@ -11,7 +11,7 @@ Content-Type: application/json
 {
   "cpf": "12345678900",
   "nome": "Teste Usuário",
-  "perfil": "MAESTRO",
+  "perfil": "usuario",
   "email": "teste@exemplo.com",
   "senha": "senha123",
   "questao": "Nome do seu animal de estimação?",
@@ -30,7 +30,7 @@ Content-Type: application/json
 ### Alterar dados do usuário
 PATCH http://localhost:3333/usuarios/alterar-usuario
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJmaWwiOiJtYWVzdHJvIiwiZW1haWwiOiJ0ZXN0ZUBleGVtcGxvLmNvbSIsImlhdCI6MTc1OTAwMjg0NywiZXhwIjoxNzU5MDg5MjQ3LCJzdWIiOiJUZXN0ZSBVc3XDoXJpbyJ9.8_p9HaZ7LZWad4tCyVKKq_EWKo7Eq7LRlk_BfU8BjzE
+Authorization: Bearer <TOKEN_DO_USUARIO>
 
 {
   "cpf": "12345678900",
@@ -39,7 +39,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJmaWwiOiJtYWVzd
 
 ### Remover usuário
 DELETE http://localhost:3333/usuarios/12345678900
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJmaWwiOiJtYWVzdHJvIiwiZW1haWwiOiJ0ZXN0ZUBleGVtcGxvLmNvbSIsImlhdCI6MTc1OTAwMjg0NywiZXhwIjoxNzU5MDg5MjQ3LCJzdWIiOiJUZXN0ZSBVc3XDoXJpbyJ9.8_p9HaZ7LZWad4tCyVKKq_EWKo7Eq7LRlk_BfU8BjzE
+Authorization: Bearer <TOKEN_DO_USUARIO>
 
 ### Buscar questao de segurança
 GET http://localhost:3333/usuarios/questao/12345678900

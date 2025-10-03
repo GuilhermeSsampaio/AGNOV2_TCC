@@ -15,8 +15,8 @@ def main():
     if not project_path.exists():
         print(f"[WARNING] Caminho não encontrado: {project_path} (tentar criar/continuar...)")
 
-    print("[INIT] Executando npm install (backend)...")
-    run(["npm", "install"], project_path)
+    # print("[INIT] Executando npm install (backend)...")
+    # run(["npm", "install"], project_path)
 
     # Não executar build/start aqui - apenas instalar dependências.
     pkg = project_path / "package.json"

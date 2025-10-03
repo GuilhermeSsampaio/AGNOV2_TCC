@@ -1,158 +1,386 @@
 {
-  "nome_projeto": "SistemaDePecasMusicais",
+  "nome_projeto": "PortalGestaoEquipes",
   "frontend": {
-    "framework": "React com PrimeReact",
+    "framework": "React com PrimeReact e PrimeFlex",
     "layout": {
       "header": {
-        "title": "Sistema de Cadastro de Peças Musicais",
-        "logo": "logo.png",
-        "menu": ["Dashboard", "Maestros", "Peças Musicais", "Configurações"]
+        "titulo": "Portal de Gestão de Equipes",
+        "logo": "assets/imagens/logo-equipes.svg",
+        "menus": [
+          "Painel",
+          "Usuários",
+          "Departamentos",
+          "Projetos",
+          "Relatórios"
+        ]
       },
       "sidebar": {
-        "items": [
-          { "label": "Dashboard", "icon": "pi pi-home", "route": "/dashboard" },
-          { "label": "Maestros", "icon": "pi pi-users", "route": "/maestros" },
+        "componentes": {
+          "menuLateral": "src/componentes/menu-lateral.jsx",
+          "avatarUsuario": "src/componentes/comuns/avatar-usuario.jsx"
+        },
+        "itens": [
+          { "label": "Painel", "icone": "pi pi-chart-line", "rota": "/painel" },
+          { "label": "Usuários", "icone": "pi pi-users", "rota": "/usuarios" },
           {
-            "label": "Peças Musicais",
-            "icon": "pi pi-music",
-            "route": "/pecas"
+            "label": "Departamentos",
+            "icone": "pi pi-building",
+            "rota": "/departamentos"
           },
           {
-            "label": "Configurações",
-            "icon": "pi pi-cog",
-            "route": "/configuracoes"
+            "label": "Projetos",
+            "icone": "pi pi-briefcase",
+            "rota": "/projetos"
+          },
+          {
+            "label": "Relatórios",
+            "icone": "pi pi-file",
+            "rota": "/relatorios"
           }
         ]
       }
     },
-    "theme": {
-      "primaryColor": "#007bff",
-      "secondaryColor": "#6c757d",
-      "fontFamily": "Arial, sans-serif"
+    "tema": {
+      "cores": {
+        "primaria": "#2563eb",
+        "secundaria": "#1e293b",
+        "destaque": "#10b981"
+      },
+      "tipografia": {
+        "familia": "'Poppins', sans-serif",
+        "pesoTitulos": 600,
+        "pesoTexto": 400
+      }
     },
-    "services": {
-      "apiBaseUrl": "/api",
-      "endpoints": {
-        "getMaestros": {
-          "url": "/maestros",
-          "method": "GET",
-          "events": ["onPageLoad", "onRefreshButtonClick"]
+    "contextos": {
+      "autenticacao": {
+        "arquivo": "src/contextos/contexto-autenticacao.jsx",
+        "estadoInicial": { "usuarioLogado": null, "token": null },
+        "acoes": ["login", "logout", "atualizarPerfil"]
+      },
+      "filtrosDashboard": {
+        "arquivo": "src/contextos/contexto-filtros-dashboard.jsx",
+        "estadoInicial": { "departamentoId": null, "periodo": "30d" }
+      }
+    },
+    "servicos": {
+      "instanciaAxios": "src/serviços/servidor.js",
+      "baseURL": "process.env.REACT_APP_API_URL",
+      "recursos": {
+        "usuarios": {
+          "listar": {
+            "url": "/api/usuarios",
+            "metodo": "GET",
+            "evento": "montagemTela"
+          },
+          "criar": {
+            "url": "/api/usuarios",
+            "metodo": "POST",
+            "evento": "submeterFormulario"
+          },
+          "atualizar": {
+            "url": "/api/usuarios/:id",
+            "metodo": "PUT",
+            "evento": "salvarEdicao"
+          },
+          "remover": {
+            "url": "/api/usuarios/:id",
+            "metodo": "DELETE",
+            "evento": "confirmarExclusao"
+          }
         },
-        "getPecas": {
-          "url": "/pecas",
-          "method": "GET",
-          "events": ["onPageLoad", "onRefreshButtonClick"]
+        "departamentos": {
+          "listar": {
+            "url": "/api/departamentos",
+            "metodo": "GET",
+            "evento": "montagemTela"
+          },
+          "criar": {
+            "url": "/api/departamentos",
+            "metodo": "POST",
+            "evento": "submeterFormulario"
+          }
         },
-        "createMaestro": {
-          "url": "/maestros",
-          "method": "POST",
-          "events": ["onSubmitForm"]
-        },
-        "createPeca": {
-          "url": "/pecas",
-          "method": "POST",
-          "events": ["onSubmitForm"]
+        "projetos": {
+          "listar": {
+            "url": "/api/projetos",
+            "metodo": "GET",
+            "evento": "montagemTela"
+          },
+          "criar": {
+            "url": "/api/projetos",
+            "metodo": "POST",
+            "evento": "submeterFormulario"
+          }
         }
       }
     },
-    "components": {
+    "componentes": {
       "dashboard": {
-        "cards": [
+        "cardsIndicadores": [
           {
-            "title": "Total de Maestros",
-            "valueSource": "getMaestros.length",
-            "icon": "pi pi-users"
+            "titulo": "Usuários ativos",
+            "icone": "pi pi-users",
+            "fonteValor": "dadosDashboard.usuariosAtivos"
           },
           {
-            "title": "Total de Peças Musicais",
-            "valueSource": "getPecas.length",
-            "icon": "pi pi-music"
+            "titulo": "Projetos em andamento",
+            "icone": "pi pi-briefcase",
+            "fonteValor": "dadosDashboard.projetosEmAndamento"
+          },
+          {
+            "titulo": "Satisfação média",
+            "icone": "pi pi-star",
+            "fonteValor": "dadosDashboard.satisfacaoMedia"
           }
+        ],
+        "graficoDesempenho": {
+          "arquivo": "src/componentes/dashboard/grafico-desempenho.jsx",
+          "tipo": "line",
+          "propriedades": { "label": "Entregas por mês", "stacked": false }
+        }
+      },
+      "usuarios": {
+        "tabela": {
+          "arquivo": "src/componentes/usuarios/tabela-usuarios.jsx",
+          "colunas": [
+            { "campo": "nome", "cabecalho": "Nome" },
+            { "campo": "email", "cabecalho": "E-mail" },
+            { "campo": "departamento", "cabecalho": "Departamento" },
+            { "campo": "ativo", "cabecalho": "Status" }
+          ]
+        },
+        "formulario": {
+          "arquivo": "src/componentes/usuarios/formulario-usuario.jsx",
+          "campos": [
+            {
+              "nome": "nome",
+              "tipo": "InputText",
+              "rotulo": "Nome completo",
+              "obrigatorio": true
+            },
+            {
+              "nome": "email",
+              "tipo": "InputText",
+              "rotulo": "E-mail corporativo",
+              "obrigatorio": true
+            },
+            {
+              "nome": "departamentoId",
+              "tipo": "Dropdown",
+              "rotulo": "Departamento",
+              "opcaoFonte": "departamentos",
+              "obrigatorio": true
+            },
+            {
+              "nome": "perfil",
+              "tipo": "Dropdown",
+              "rotulo": "Perfil de acesso",
+              "opcoes": ["Administrador", "Gestor", "Colaborador"]
+            }
+          ]
+        }
+      },
+      "comuns": {
+        "modalConfirmacao": "src/componentes/comuns/modal-confirmacao.jsx",
+        "seletorPeriodo": "src/componentes/comuns/seletor-periodo.jsx",
+        "emptyState": "src/componentes/comuns/empty-state.jsx"
+      }
+    },
+    "paginas": {
+      "painel": {
+        "arquivo": "src/páginas/painel/painel-geral.jsx",
+        "componentes": [
+          "cardsIndicadores",
+          "graficoDesempenho",
+          "seletorPeriodo"
         ]
       },
-      "forms": {
-        "maestroForm": {
-          "fields": [
-            {
-              "name": "nome",
-              "type": "text",
-              "label": "Nome do Maestro",
-              "required": true
-            },
-            {
-              "name": "email",
-              "type": "email",
-              "label": "Email",
-              "required": true
-            }
-          ],
-          "submitEvent": "createMaestro"
-        },
-        "pecaForm": {
-          "fields": [
-            {
-              "name": "titulo",
-              "type": "text",
-              "label": "Título da Peça",
-              "required": true
-            },
-            {
-              "name": "compositor",
-              "type": "text",
-              "label": "Compositor",
-              "required": true
-            }
-          ],
-          "submitEvent": "createPeca"
-        }
+      "usuarios": {
+        "arquivo": "src/páginas/usuarios/listar-usuarios.jsx",
+        "componentes": ["tabela", "formulario", "modalConfirmacao"]
+      },
+      "departamentos": {
+        "arquivo": "src/páginas/departamentos/gerenciar-departamentos.jsx",
+        "componentes": ["tabela", "formularioSimples"]
+      },
+      "projetos": {
+        "arquivo": "src/páginas/projetos/acompanhar-projetos.jsx",
+        "componentes": ["tabelaProjetos", "graficoDesempenho"]
       }
     },
-    "navigation": {
-      "routes": [
-        { "path": "/dashboard", "component": "Dashboard" },
-        { "path": "/maestros", "component": "Maestros" },
-        { "path": "/pecas", "component": "Pecas" },
-        { "path": "/configuracoes", "component": "Configuracoes" }
-      ]
+    "navegacao": {
+      "rotas": [
+        {
+          "caminho": "/painel",
+          "componente": "PainelGeral",
+          "protegida": true
+        },
+        { "caminho": "/usuarios", "componente": "Usuarios", "protegida": true },
+        {
+          "caminho": "/departamentos",
+          "componente": "Departamentos",
+          "protegida": true
+        },
+        { "caminho": "/projetos", "componente": "Projetos", "protegida": true },
+        { "caminho": "/login", "componente": "Login", "layout": "publico" }
+      ],
+      "arquivoRotas": "src/rotas/rotas-aplicação.js",
+      "arquivoRotasProtegidas": "src/rotas/rotas-usuário-logado.js"
+    },
+    "utilitarios": {
+      "arquivos": [
+        "src/utilitários/formatadores.js",
+        "src/utilitários/validacoes.js",
+        "src/utilitários/mensagens.js"
+      ],
+      "validacoes": {
+        "nome": "minLength:3",
+        "email": "email",
+        "senha": "minLength:8"
+      }
     }
   },
   "backend": {
-    "framework": "Node.js com Express",
+    "framework": "Node.js com Express e TypeORM",
     "database": {
-      "type": "MongoDB",
-      "models": {
-        "Maestro": {
-          "nome": { "type": "String", "required": true },
-          "email": { "type": "String", "required": true, "unique": true }
+      "type": "PostgreSQL",
+      "env": {
+        "host": "DB_HOST",
+        "port": "DB_PORT",
+        "username": "DB_USER",
+        "password": "DB_PASSWORD",
+        "database": "DB_NAME"
+      },
+      "entities": {
+        "Usuario": {
+          "table": "usuarios",
+          "columns": {
+            "id": { "type": "uuid", "primary": true, "generated": "uuid" },
+            "nome": { "type": "varchar", "length": 120, "nullable": false },
+            "email": { "type": "varchar", "unique": true, "nullable": false },
+            "senha": { "type": "varchar", "nullable": false },
+            "perfil": {
+              "type": "varchar",
+              "nullable": false,
+              "default": "Colaborador"
+            },
+            "ativo": { "type": "boolean", "default": true },
+            "criadoEm": { "type": "timestamp", "default": "now()" }
+          },
+          "relationships": {
+            "departamento": {
+              "type": "many-to-one",
+              "target": "Departamento",
+              "joinColumn": "departamento_id"
+            },
+            "projetos": {
+              "type": "one-to-many",
+              "target": "Projeto",
+              "inverse": "responsavel"
+            }
+          }
         },
-        "PecaMusical": {
-          "titulo": { "type": "String", "required": true },
-          "compositor": { "type": "String", "required": true }
+        "Departamento": {
+          "table": "departamentos",
+          "columns": {
+            "id": { "type": "uuid", "primary": true, "generated": "uuid" },
+            "nome": { "type": "varchar", "length": 80, "nullable": false },
+            "descricao": { "type": "text", "nullable": true },
+            "criadoEm": { "type": "timestamp", "default": "now()" }
+          },
+          "relationships": {
+            "usuarios": {
+              "type": "one-to-many",
+              "target": "Usuario",
+              "inverse": "departamento"
+            },
+            "projetos": {
+              "type": "one-to-many",
+              "target": "Projeto",
+              "inverse": "departamento"
+            }
+          }
+        },
+        "Projeto": {
+          "table": "projetos",
+          "columns": {
+            "id": { "type": "uuid", "primary": true, "generated": "uuid" },
+            "titulo": { "type": "varchar", "length": 150, "nullable": false },
+            "descricao": { "type": "text", "nullable": true },
+            "status": {
+              "type": "varchar",
+              "nullable": false,
+              "default": "Planejado"
+            },
+            "dataInicio": { "type": "date", "nullable": true },
+            "dataFim": { "type": "date", "nullable": true }
+          },
+          "relationships": {
+            "responsavel": {
+              "type": "many-to-one",
+              "target": "Usuario",
+              "joinColumn": "responsavel_id"
+            },
+            "departamento": {
+              "type": "many-to-one",
+              "target": "Departamento",
+              "joinColumn": "departamento_id"
+            }
+          }
         }
       }
     },
-    "endpoints": [
+    "servicos": {
+      "usuarios": "src/servicos/servicos-usuarios.ts",
+      "departamentos": "src/servicos/servicos-departamentos.ts",
+      "projetos": "src/servicos/servicos-projetos.ts"
+    },
+    "rotas": [
       {
-        "route": "/api/maestros",
-        "method": "GET",
-        "action": "Retorna todos os maestros"
+        "arquivo": "src/rotas/rotas-usuarios.ts",
+        "endpoint": "/api/usuarios",
+        "metodos": {
+          "GET": "listarUsuarios",
+          "POST": "criarUsuario",
+          "PUT": "atualizarUsuario",
+          "DELETE": "removerUsuario"
+        }
       },
       {
-        "route": "/api/maestros",
-        "method": "POST",
-        "action": "Cria um novo maestro",
-        "body": ["nome", "email"]
+        "arquivo": "src/rotas/rotas-departamentos.ts",
+        "endpoint": "/api/departamentos",
+        "metodos": {
+          "GET": "listarDepartamentos",
+          "POST": "criarDepartamento",
+          "PUT": "atualizarDepartamento",
+          "DELETE": "removerDepartamento"
+        }
       },
       {
-        "route": "/api/pecas",
-        "method": "GET",
-        "action": "Retorna todas as peças musicais"
+        "arquivo": "src/rotas/rotas-projetos.ts",
+        "endpoint": "/api/projetos",
+        "metodos": {
+          "GET": "listarProjetos",
+          "POST": "criarProjeto",
+          "PUT": "atualizarProjeto",
+          "DELETE": "removerProjeto"
+        }
+      }
+    ],
+    "middlewares": [
+      {
+        "arquivo": "src/middlewares/autenticacao-jwt.ts",
+        "descricao": "Valida token JWT e adiciona usuario na requisicao",
+        "rotasProtegidas": [
+          "/api/usuarios",
+          "/api/departamentos",
+          "/api/projetos"
+        ]
       },
       {
-        "route": "/api/pecas",
-        "method": "POST",
-        "action": "Cria uma nova peça musical",
-        "body": ["titulo", "compositor"]
+        "arquivo": "src/middlewares/tratamento-erros.ts",
+        "descricao": "Captura excecoes e padroniza respostas JSON"
       }
     ]
   }

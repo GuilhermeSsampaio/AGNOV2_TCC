@@ -10,7 +10,7 @@
     "build": "tsc",
     "start": "node build/src/servidor.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "webapp": "cd ../front-end && yarn start",
+    "webapp": "cd ../frontend && yarn start",
     "server": "nodemon -e ts --exec ts-node -r tsconfig-paths/register ./src/servidor.ts",
     "web": "concurrently -n 'server,web' -c 'green,blue' \"yarn server\" \"yarn webapp\""
   },

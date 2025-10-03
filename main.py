@@ -14,9 +14,33 @@ import time
 import sys
 import subprocess
 
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 SCRIPTS_DIR = Path("scripts")
+
+
+def _run_npm_install(target: Path) -> None:
+    if not target.exists():
+        logging.warning("Caminho para npm install nao encontrado: %s", target)
+        return
+
+    package_json = target / "package.json"
+    if not package_json.exists():
+        logging.info("Sem package.json em %s; pulando npm install.", target)
+        return
+
+    logging.info("Executando npm install em %s", target)
+    try:
+        subprocess.run(["npm", "install"], cwd=str(target), check=True)
+        logging.info("npm install concluido em %s", target)
+    except subprocess.CalledProcessError as exc:
+        logging.warning("npm install falhou em %s: %s", target, exc)
+    except FileNotFoundError:
+        logging.warning("npm nao encontrado no PATH; instale Node.js ou ajuste o ambiente antes de continuar.")
 
 def orchestrator(shared: dict):
     # Analisa a especificação do frontend já extraída e gera um relatório
@@ -62,7 +86,7 @@ def run_agents(shared: dict):
     # Alguns recursos externos (APIs, instalações) podem exigir tempo para
     # estabilizar; adicionamos um delay para reduzir possibilidade de erros
     # por taxa/limitação/consumo rápido de quota.
-    DELAY_SECONDS = 60
+    DELAY_SECONDS = 160
     logging.info("Aguardando %s segundos antes de iniciar o backend...", DELAY_SECONDS)
     time.sleep(DELAY_SECONDS)
 
@@ -130,16 +154,25 @@ def main():
     if info:
         readme = Path(info["project_path"]) / "README.md"
         readme.write_text(get_project_readme_content(), encoding="utf-8")
-        # Após gerar o projeto e o README, iniciar automaticamente o projeto
-        # em novos terminais (frontend e backend). Usamos o script
-        # scripts/run_project.py com o interpretador atual.
+
+        frontend_path = Path(info.get("full_frontend_path", ""))
+        backend_path = Path(info.get("full_backend_path", ""))
+
+        _run_npm_install(frontend_path)
+        _run_npm_install(backend_path)
+
         run_script = Path("scripts") / "run_project.py"
         if run_script.exists():
             try:
-                fe = info.get("full_frontend_path")
-                be = info.get("full_backend_path")
-                cmd = [sys.executable, str(run_script), "--frontend", str(fe), "--backend", str(be)]
-                logging.info("Iniciando run_project.py para abrir terminais de front/back...")
+                cmd = [
+                    sys.executable,
+                    str(run_script),
+                    "--frontend",
+                    str(frontend_path),
+                    "--backend",
+                    str(backend_path),
+                ]
+                logging.info("Iniciando run_project.py para subir frontend e backend...")
                 subprocess.Popen(cmd)
             except Exception as e:
                 logging.warning("Falha ao iniciar run_project: %s", e)

@@ -1,10 +1,23 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import "primereact/resources/themes/saga-blue/theme.css";
+import { hydrateRoot, createRoot } from "react-dom/client";
+import { locale, addLocale } from "primereact/api";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
+import "/node_modules/primeflex/primeflex.css";
 import "primeicons/primeicons.css";
-import "primeflex/primeflex.css";
+import "./global.css";
+import português from "./utilitários/português.json";
+import Rotas from "./rotas/rotas-aplicação";
+import { ProvedorUsuário } from "./contextos/contexto-usuário";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+addLocale("pt", português);
+locale("pt");
+const rootElement = document.getElementById("root");
+
+const App = (
+  <ProvedorUsuário>
+    <Rotas />
+  </ProvedorUsuário>
+);
+if (rootElement.hasChildNodes()) hydrateRoot(App, rootElement);
+else createRoot(rootElement).render(App);

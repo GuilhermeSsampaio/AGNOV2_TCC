@@ -46,7 +46,15 @@ class BufferedFileTools(FileTools):
         while parts and parts[0] in self._strip_prefixes:
             parts.pop(0)
 
-        normalized = Path(*parts) if parts else Path(".")
+        if parts:
+            parts = [p for p in parts if p not in self._strip_prefixes]
+
+        deduped: list[str] = []
+        for part in parts:
+            if not deduped or deduped[-1] != part:
+                deduped.append(part)
+
+        normalized = Path(*deduped) if deduped else Path(".")
         if normalized == Path("."):
             raise ValueError(f"Caminho invalido apos normalizacao: {path}")
         return normalized

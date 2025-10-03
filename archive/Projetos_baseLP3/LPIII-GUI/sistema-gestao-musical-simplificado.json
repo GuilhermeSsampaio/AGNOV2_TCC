@@ -1,0 +1,493 @@
+{
+  "nome_projeto": "SistemaDeGestaoMusicalSimplificado",
+  "frontend": {
+    "framework": "React com PrimeReact",
+    "layout": {
+      "header": {
+        "title": "Sistema de Gestão Musical",
+        "menu_lateral": true,
+        "responsivo": true
+      },
+      "sidebar": {
+        "tipo": "simples",
+        "itens": [
+          { "label": "Dashboard", "icon": "pi pi-home", "route": "/dashboard" },
+          { "label": "Perfil", "icon": "pi pi-user", "route": "/perfil" },
+          {
+            "label": "Peças Musicais",
+            "icon": "pi pi-music",
+            "route": "/pecas-musicais"
+          },
+          {
+            "label": "Configurações",
+            "icon": "pi pi-cog",
+            "route": "/configuracoes"
+          }
+        ]
+      }
+    },
+    "theme": {
+      "cores_tema": ["blue", "green", "purple", "orange", "teal"],
+      "responsivo": true,
+      "primereact_version": "7.2.1"
+    },
+    "autenticacao": {
+      "sistema_login": true,
+      "perfil_unico": "maestro",
+      "status_usuario": ["ativo", "inativo"],
+      "recuperacao_senha": {
+        "por_email": true
+      },
+      "campos_obrigatorios": ["email", "nome", "senha"]
+    },
+    "services": {
+      "apiBaseUrl": "/api",
+      "endpoints": {
+        "auth": {
+          "login": { "url": "/auth/login", "method": "POST" },
+          "cadastrar": { "url": "/auth/register", "method": "POST" },
+          "recuperar_senha": {
+            "url": "/auth/forgot-password",
+            "method": "POST"
+          }
+        },
+        "maestros": {
+          "perfil": { "url": "/maestros/perfil", "method": "GET" },
+          "atualizar": { "url": "/maestros/perfil", "method": "PUT" }
+        },
+        "pecas_musicais": {
+          "listar": { "url": "/pecas-musicais", "method": "GET" },
+          "buscar": { "url": "/pecas-musicais/:id", "method": "GET" },
+          "criar": { "url": "/pecas-musicais", "method": "POST" },
+          "atualizar": { "url": "/pecas-musicais/:id", "method": "PUT" },
+          "deletar": { "url": "/pecas-musicais/:id", "method": "DELETE" }
+        }
+      }
+    },
+    "components": {
+      "dashboard": {
+        "cards": [
+          {
+            "title": "Total de Peças",
+            "valueSource": "pecas_musicais.length",
+            "icon": "pi pi-music"
+          },
+          {
+            "title": "Peças Clássicas",
+            "valueSource": "pecas_musicais.filter(p => p.genero === 'clássico').length",
+            "icon": "pi pi-star"
+          },
+          {
+            "title": "Última Peça Criada",
+            "valueSource": "pecas_musicais[0].titulo",
+            "icon": "pi pi-clock"
+          }
+        ]
+      },
+      "forms": {
+        "usuario_form": {
+          "fields": [
+            {
+              "name": "nome",
+              "type": "text",
+              "label": "Nome Completo",
+              "required": true
+            },
+            {
+              "name": "email",
+              "type": "email",
+              "label": "Email",
+              "required": true
+            },
+            {
+              "name": "senha",
+              "type": "password",
+              "label": "Senha",
+              "required": true
+            }
+          ]
+        },
+        "maestro_form": {
+          "fields": [
+            {
+              "name": "nome",
+              "type": "text",
+              "label": "Nome Completo",
+              "required": true
+            },
+            {
+              "name": "email",
+              "type": "email",
+              "label": "Email",
+              "required": true
+            },
+            {
+              "name": "anos_experiencia",
+              "type": "number",
+              "label": "Anos de Experiência",
+              "required": true
+            },
+            {
+              "name": "especialidade",
+              "type": "dropdown",
+              "label": "Especialidade",
+              "required": true,
+              "options": ["clássico", "pop", "rock", "jazz"]
+            },
+            {
+              "name": "biografia",
+              "type": "textarea",
+              "label": "Biografia",
+              "required": false
+            }
+          ]
+        },
+        "peca_musical_form": {
+          "fields": [
+            {
+              "name": "titulo",
+              "type": "text",
+              "label": "Título da Peça",
+              "required": true
+            },
+            {
+              "name": "compositor",
+              "type": "text",
+              "label": "Compositor",
+              "required": true
+            },
+            {
+              "name": "duracao",
+              "type": "number",
+              "label": "Duração (minutos)",
+              "required": true
+            },
+            {
+              "name": "tom",
+              "type": "text",
+              "label": "Tom Musical",
+              "required": true
+            },
+            {
+              "name": "genero",
+              "type": "dropdown",
+              "label": "Gênero",
+              "required": true,
+              "options": ["clássico", "pop", "rock", "jazz"]
+            },
+            {
+              "name": "ano_composicao",
+              "type": "number",
+              "label": "Ano de Composição",
+              "required": false
+            },
+            {
+              "name": "descricao",
+              "type": "textarea",
+              "label": "Descrição",
+              "required": false
+            }
+          ]
+        }
+      },
+      "tables": {
+        "pecas_musicais_table": {
+          "columns": [
+            {
+              "field": "titulo",
+              "header": "Título",
+              "sortable": true,
+              "filterable": true
+            },
+            {
+              "field": "compositor",
+              "header": "Compositor",
+              "sortable": true,
+              "filterable": true
+            },
+            {
+              "field": "genero",
+              "header": "Gênero",
+              "sortable": true,
+              "filterable": true
+            },
+            { "field": "duracao", "header": "Duração", "sortable": true },
+            { "field": "tom", "header": "Tom", "sortable": true },
+            { "field": "acoes", "header": "Ações", "sortable": false }
+          ],
+          "features": {
+            "paginacao": true,
+            "filtros": true,
+            "ordenacao": true,
+            "responsivo": true,
+            "selecao": true
+          }
+        }
+      }
+    },
+    "navigation": {
+      "router": "react-router-dom",
+      "rotas_publicas": [
+        { "path": "/", "component": "Login" },
+        { "path": "/register", "component": "Cadastro" },
+        { "path": "/forgot-password", "component": "RecuperarSenha" }
+      ],
+      "rotas_protegidas": [
+        { "path": "/dashboard", "component": "Dashboard" },
+        { "path": "/perfil", "component": "Perfil" },
+        { "path": "/pecas-musicais", "component": "ListarPecasMusicais" },
+        { "path": "/pecas-musicais/novo", "component": "CriarPecaMusical" },
+        {
+          "path": "/pecas-musicais/:id/editar",
+          "component": "EditarPecaMusical"
+        },
+        { "path": "/configuracoes", "component": "Configuracoes" }
+      ]
+    }
+  },
+  "backend": {
+    "framework": "Node.js com Express e TypeScript",
+    "database": {
+      "orm": "TypeORM",
+      "tipo": "PostgreSQL ou MongoDB",
+      "entidades": {
+        "Maestro": {
+          "id": { "type": "number", "primary": true, "generated": true },
+          "nome": { "type": "string", "required": true },
+          "email": { "type": "string", "required": true, "unique": true },
+          "senha": { "type": "string", "required": true },
+          "anos_experiencia": { "type": "number", "required": true },
+          "especialidade": {
+            "type": "enum",
+            "values": ["clássico", "pop", "rock", "jazz"],
+            "required": true
+          },
+          "biografia": { "type": "text", "required": false },
+          "status": {
+            "type": "enum",
+            "values": ["ativo", "inativo"],
+            "default": "ativo"
+          },
+          "data_criacao": { "type": "timestamp", "auto": true },
+          "data_atualizacao": { "type": "timestamp", "auto": true },
+          "relationships": {
+            "pecas_musicais": { "type": "OneToMany" }
+          }
+        },
+        "PecaMusical": {
+          "id": { "type": "number", "primary": true, "generated": true },
+          "titulo": { "type": "string", "required": true },
+          "compositor": { "type": "string", "required": true },
+          "duracao": { "type": "number", "required": true },
+          "tom": { "type": "string", "required": true },
+          "genero": {
+            "type": "enum",
+            "values": ["clássico", "pop", "rock", "jazz"],
+            "required": true
+          },
+          "ano_composicao": { "type": "number", "required": false },
+          "descricao": { "type": "text", "required": false },
+          "data_criacao": { "type": "timestamp", "auto": true },
+          "data_atualizacao": { "type": "timestamp", "auto": true },
+          "relationships": {
+            "maestro": { "type": "ManyToOne", "required": true }
+          }
+        }
+      }
+    },
+    "autenticacao": {
+      "jwt": true,
+      "bcrypt": true,
+      "middlewares": ["auth", "validate"],
+      "sessao_expiracao": "24h"
+    },
+    "endpoints": {
+      "auth": [
+        {
+          "route": "/api/auth/login",
+          "method": "POST",
+          "action": "Autenticar maestro",
+          "middleware": false
+        },
+        {
+          "route": "/api/auth/register",
+          "method": "POST",
+          "action": "Cadastrar novo maestro",
+          "middleware": false
+        },
+        {
+          "route": "/api/auth/forgot-password",
+          "method": "POST",
+          "action": "Recuperar senha",
+          "middleware": false
+        },
+        {
+          "route": "/api/auth/me",
+          "method": "GET",
+          "action": "Dados do usuário logado",
+          "middleware": ["auth"]
+        }
+      ],
+      "maestros": [
+        {
+          "route": "/api/maestros/perfil",
+          "method": "GET",
+          "action": "Buscar perfil do maestro",
+          "middleware": ["auth"]
+        },
+        {
+          "route": "/api/maestros/perfil",
+          "method": "PUT",
+          "action": "Atualizar perfil do maestro",
+          "middleware": ["auth"]
+        }
+      ],
+      "pecas_musicais": [
+        {
+          "route": "/api/pecas-musicais",
+          "method": "GET",
+          "action": "Listar peças musicais do maestro",
+          "middleware": ["auth"]
+        },
+        {
+          "route": "/api/pecas-musicais/:id",
+          "method": "GET",
+          "action": "Buscar peça musical por ID",
+          "middleware": ["auth"]
+        },
+        {
+          "route": "/api/pecas-musicais",
+          "method": "POST",
+          "action": "Criar nova peça musical",
+          "middleware": ["auth"]
+        },
+        {
+          "route": "/api/pecas-musicais/:id",
+          "method": "PUT",
+          "action": "Atualizar peça musical",
+          "middleware": ["auth"]
+        },
+        {
+          "route": "/api/pecas-musicais/:id",
+          "method": "DELETE",
+          "action": "Deletar peça musical",
+          "middleware": ["auth"]
+        }
+      ]
+    },
+    "dependencias": {
+      "principais": [
+        "express",
+        "typeorm",
+        "bcryptjs",
+        "jsonwebtoken",
+        "cors",
+        "helmet",
+        "express-rate-limit"
+      ],
+      "desenvolvimento": [
+        "typescript",
+        "ts-node",
+        "nodemon",
+        "@types/node",
+        "@types/express"
+      ]
+    },
+    "configuracao": {
+      "typescript": true,
+      "ambiente_variaveis": [
+        "PORT",
+        "NODE_ENV",
+        "JWT_SECRET",
+        "DB_TYPE",
+        "DB_HOST",
+        "DB_PORT",
+        "DB_USERNAME",
+        "DB_PASSWORD",
+        "DB_DATABASE"
+      ],
+      "validacao": {
+        "joi": true,
+        "express_validator": false
+      },
+      "logging": {
+        "winston": true,
+        "levels": ["error", "warn", "info", "debug"]
+      }
+    }
+  },
+  "recursos_especiais": {
+    "validacoes": {
+      "email": true,
+      "senhas_fortes": true,
+      "duracao_musical": true
+    },
+    "utilitarios": {
+      "toast_notificacoes": true,
+      "loading_states": true,
+      "error_boundaries": true,
+      "formatacao_tempo": true
+    },
+    "responsividade": {
+      "mobile_first": true,
+      "breakpoints": {
+        "mobile": "768px",
+        "tablet": "1024px",
+        "desktop": "1200px"
+      },
+      "menu_colapsivel": true
+    },
+    "performance": {
+      "lazy_loading": true,
+      "memoization": true,
+      "virtual_scrolling": false
+    }
+  },
+  "arquitetura": {
+    "padrao": "Clean Architecture com separação por camadas",
+    "frontend": {
+      "estado_global": "React Context",
+      "hooks_customizados": true,
+      "componentes_reutilizaveis": true,
+      "atomic_design": false
+    },
+    "backend": {
+      "controllers": true,
+      "services": true,
+      "repositories": true,
+      "middlewares": true,
+      "validators": true
+    },
+    "comunicacao": {
+      "rest_api": true,
+      "axios_interceptors": true,
+      "error_handling": true,
+      "loading_states": true
+    },
+    "seguranca": {
+      "cors_configurado": true,
+      "helmet_headers": true,
+      "rate_limiting": true,
+      "input_sanitization": true
+    }
+  },
+  "funcionalidades": {
+    "dashboard": {
+      "estatisticas_basicas": true,
+      "graficos_simples": false,
+      "atividade_recente": true
+    },
+    "gestao_pecas": {
+      "crud_completo": true,
+      "busca_avancada": true,
+      "filtros_multiplos": true,
+      "ordenacao": true,
+      "paginacao": true
+    },
+    "perfil_maestro": {
+      "edicao_dados": true,
+      "alteracao_senha": true,
+      "foto_perfil": false
+    }
+  }
+}

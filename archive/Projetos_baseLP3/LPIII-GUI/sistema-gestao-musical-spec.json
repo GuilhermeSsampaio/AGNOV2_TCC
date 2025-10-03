@@ -1,0 +1,694 @@
+{
+  "nome_projeto": "SistemaDeGestaoMusical",
+  "frontend": {
+    "framework": "React com PrimeReact",
+    "layout": {
+      "header": {
+        "title": "Sistema de Gestão Musical",
+        "menu_lateral": true,
+        "responsivo": true
+      },
+      "sidebar": {
+        "tipo": "adaptativo",
+        "itens_maestro": [
+          {
+            "label": "Página Inicial",
+            "icon": "pi pi-home",
+            "route": "/pagina-inicial"
+          },
+          {
+            "label": "Cadastrar Usuário",
+            "icon": "pi pi-user-plus",
+            "route": "/atualizar-usuario"
+          },
+          {
+            "label": "Cadastrar Maestro",
+            "icon": "pi pi-user",
+            "route": "/cadastrar-maestro"
+          },
+          {
+            "label": "Administrar Peças Musicais",
+            "icon": "pi pi-music",
+            "route": "/administrar-pecas-musicais"
+          },
+          {
+            "label": "Cadastrar Peça Musical",
+            "icon": "pi pi-plus",
+            "route": "/cadastrar-peca-musical"
+          },
+          {
+            "label": "Consultar Patrocinador",
+            "icon": "pi pi-search",
+            "route": "/consultar-patrocinador"
+          },
+          {
+            "label": "Consultar Patrocínio",
+            "icon": "pi pi-eye",
+            "route": "/consultar-patrocinio"
+          },
+          {
+            "label": "Pesquisar Patrocínios",
+            "icon": "pi pi-list",
+            "route": "/pesquisar-patrocinios"
+          }
+        ],
+        "itens_patrocinador": [
+          {
+            "label": "Página Inicial",
+            "icon": "pi pi-home",
+            "route": "/pagina-inicial"
+          },
+          {
+            "label": "Cadastrar Usuário",
+            "icon": "pi pi-user-plus",
+            "route": "/atualizar-usuario"
+          },
+          {
+            "label": "Cadastrar Patrocinador",
+            "icon": "pi pi-user",
+            "route": "/cadastrar-patrocinador"
+          },
+          {
+            "label": "Administrar Patrocínios",
+            "icon": "pi pi-briefcase",
+            "route": "/administrar-patrocinios"
+          },
+          {
+            "label": "Cadastrar Patrocínio",
+            "icon": "pi pi-plus",
+            "route": "/cadastrar-patrocinio"
+          },
+          {
+            "label": "Consultar Maestro",
+            "icon": "pi pi-search",
+            "route": "/consultar-maestro"
+          },
+          {
+            "label": "Consultar Peça Musical",
+            "icon": "pi pi-eye",
+            "route": "/consultar-peca-musical"
+          },
+          {
+            "label": "Pesquisar Peças Musicais",
+            "icon": "pi pi-list",
+            "route": "/pesquisar-pecas-musicais"
+          }
+        ]
+      }
+    },
+    "theme": {
+      "cores_tema": [
+        "yellow",
+        "indigo",
+        "blue",
+        "cyan",
+        "bluegray",
+        "orange",
+        "pink",
+        "purple",
+        "green",
+        "teal"
+      ],
+      "responsivo": true,
+      "primereact_version": "7.2.1"
+    },
+    "autenticacao": {
+      "sistema_login": true,
+      "perfis": ["maestro", "patrocinador"],
+      "status_usuario": ["pendente", "ativo", "inativo"],
+      "recuperacao_senha": {
+        "por_pergunta_secreta": true
+      },
+      "campos_obrigatorios": [
+        "cpf",
+        "nome",
+        "email",
+        "senha",
+        "questão",
+        "resposta"
+      ]
+    },
+    "services": {
+      "apiBaseUrl": "/api",
+      "endpoints": {
+        "auth": {
+          "login": { "url": "/usuarios/logar", "method": "POST" },
+          "cadastrar_usuario": { "url": "/usuarios", "method": "POST" },
+          "recuperar_acesso": {
+            "url": "/usuarios/recuperar-acesso",
+            "method": "POST"
+          }
+        },
+        "maestros": {
+          "buscar": { "url": "/maestros/:cpf", "method": "GET" },
+          "cadastrar": { "url": "/maestros", "method": "POST" },
+          "atualizar": { "url": "/maestros", "method": "PATCH" }
+        },
+        "patrocinadores": {
+          "buscar": { "url": "/patrocinadores/:cpf", "method": "GET" },
+          "cadastrar": { "url": "/patrocinadores", "method": "POST" },
+          "atualizar": { "url": "/patrocinadores", "method": "PATCH" }
+        },
+        "pecas_musicais": {
+          "buscar_por_maestro": {
+            "url": "/maestros/pecas-musicais/maestro/:cpf",
+            "method": "GET"
+          },
+          "cadastrar": { "url": "/maestros/pecas-musicais", "method": "POST" },
+          "alterar": { "url": "/maestros/pecas-musicais", "method": "PATCH" },
+          "remover": {
+            "url": "/maestros/pecas-musicais/:id",
+            "method": "DELETE"
+          },
+          "buscar_patrocinios": {
+            "url": "/maestros/pecas-musicais/:id/patrocinios",
+            "method": "GET"
+          }
+        },
+        "patrocinios": {
+          "buscar_por_patrocinador": {
+            "url": "/patrocinadores/patrocinios/patrocinador/:cpf",
+            "method": "GET"
+          },
+          "cadastrar": {
+            "url": "/patrocinadores/patrocinios",
+            "method": "POST"
+          },
+          "alterar": {
+            "url": "/patrocinadores/patrocinios",
+            "method": "PATCH"
+          },
+          "remover": {
+            "url": "/patrocinadores/patrocinios/:id",
+            "method": "DELETE"
+          }
+        }
+      }
+    },
+    "components": {
+      "forms": {
+        "usuario_form": {
+          "fields": [
+            {
+              "name": "cpf",
+              "type": "text",
+              "label": "CPF",
+              "required": true,
+              "mask": "999.999.999-99"
+            },
+            {
+              "name": "nome",
+              "type": "text",
+              "label": "Nome Completo",
+              "required": true
+            },
+            {
+              "name": "email",
+              "type": "email",
+              "label": "Email",
+              "required": true
+            },
+            {
+              "name": "senha",
+              "type": "password",
+              "label": "Senha",
+              "required": true
+            },
+            {
+              "name": "questão",
+              "type": "text",
+              "label": "Pergunta de Segurança",
+              "required": true
+            },
+            {
+              "name": "resposta",
+              "type": "text",
+              "label": "Resposta",
+              "required": true
+            },
+            {
+              "name": "perfil",
+              "type": "dropdown",
+              "label": "Perfil",
+              "required": true,
+              "options": ["maestro", "patrocinador"]
+            },
+            {
+              "name": "cor_tema",
+              "type": "dropdown",
+              "label": "Cor do Tema",
+              "required": true
+            }
+          ]
+        },
+        "maestro_form": {
+          "fields": [
+            {
+              "name": "estilo",
+              "type": "dropdown",
+              "label": "Estilo",
+              "required": true,
+              "options": ["simples", "elegante"]
+            },
+            {
+              "name": "anos_experiência",
+              "type": "number",
+              "label": "Anos de Experiência",
+              "required": true
+            },
+            {
+              "name": "nacionalidade",
+              "type": "dropdown",
+              "label": "Nacionalidade",
+              "required": true,
+              "options": ["brasileiro", "estrangeiro"]
+            }
+          ]
+        },
+        "patrocinador_form": {
+          "fields": [
+            {
+              "name": "empresa",
+              "type": "text",
+              "label": "Nome da Empresa",
+              "required": true
+            },
+            {
+              "name": "telefone",
+              "type": "text",
+              "label": "Telefone",
+              "required": true,
+              "mask": "(99) 99999-9999"
+            }
+          ]
+        },
+        "peca_musical_form": {
+          "fields": [
+            {
+              "name": "título",
+              "type": "text",
+              "label": "Título da Peça",
+              "required": true
+            },
+            {
+              "name": "duração",
+              "type": "number",
+              "label": "Duração (minutos)",
+              "required": true
+            },
+            {
+              "name": "tom",
+              "type": "text",
+              "label": "Tom Musical",
+              "required": true
+            },
+            {
+              "name": "gênero",
+              "type": "dropdown",
+              "label": "Gênero",
+              "required": true,
+              "options": ["clássico", "pop", "rock"]
+            },
+            {
+              "name": "internacional",
+              "type": "checkbox",
+              "label": "Internacional",
+              "required": false
+            }
+          ]
+        },
+        "patrocinio_form": {
+          "fields": [
+            {
+              "name": "orçamento_disponível",
+              "type": "currency",
+              "label": "Orçamento Disponível",
+              "required": true
+            },
+            {
+              "name": "show_exposicao",
+              "type": "checkbox",
+              "label": "Show de Exposição",
+              "required": false
+            },
+            {
+              "name": "peça_musical_id",
+              "type": "dropdown",
+              "label": "Peça Musical",
+              "required": true
+            }
+          ]
+        }
+      },
+      "tables": {
+        "data_table_config": {
+          "paginacao": true,
+          "filtros": true,
+          "ordenacao": true,
+          "responsivo": true,
+          "exportacao": false
+        }
+      },
+      "modais": {
+        "modal_confirmacao": true,
+        "modal_recuperar_acesso": true
+      }
+    },
+    "navigation": {
+      "router": "react-router-dom",
+      "rotas_publicas": [
+        { "path": "/", "component": "LogarUsuário" },
+        { "path": "/cadastrar-usuario", "component": "CadastrarUsuário" },
+        { "path": "/recuperar-acesso", "component": "RecuperarAcesso" }
+      ],
+      "rotas_autenticadas": [
+        { "path": "/pagina-inicial", "component": "PáginaInicial" },
+        {
+          "path": "/administrar-pecas-musicais",
+          "component": "AdministrarPeçasMusicais",
+          "perfil": "maestro"
+        },
+        {
+          "path": "/cadastrar-peca-musical",
+          "component": "CadastrarPeçaMusical",
+          "perfil": "maestro"
+        },
+        {
+          "path": "/administrar-patrocinios",
+          "component": "AdministrarPatrocínios",
+          "perfil": "patrocinador"
+        },
+        {
+          "path": "/cadastrar-patrocinio",
+          "component": "CadastrarPatrocínio",
+          "perfil": "patrocinador"
+        }
+      ]
+    }
+  },
+  "backend": {
+    "framework": "Node.js com Express e TypeScript",
+    "database": {
+      "orm": "TypeORM",
+      "tipo_configuravel": true,
+      "entidades": {
+        "Usuario": {
+          "cpf": { "type": "string", "primary": true },
+          "perfil": {
+            "type": "enum",
+            "values": ["patrocinador", "maestro"],
+            "required": true
+          },
+          "status": {
+            "type": "enum",
+            "values": ["pendente", "ativo", "inativo"],
+            "default": "pendente"
+          },
+          "nome": { "type": "string", "required": true },
+          "email": { "type": "string", "required": true },
+          "senha": { "type": "string", "required": true },
+          "questão": { "type": "string", "required": true },
+          "resposta": { "type": "string", "required": true },
+          "cor_tema": {
+            "type": "enum",
+            "values": [
+              "yellow",
+              "indigo",
+              "blue",
+              "cyan",
+              "bluegray",
+              "orange",
+              "pink",
+              "purple",
+              "green",
+              "teal"
+            ]
+          },
+          "data_criação": { "type": "timestamp", "auto": true },
+          "relationships": {
+            "maestro": { "type": "OneToOne", "cascade": true },
+            "patrocinador": { "type": "OneToOne", "cascade": true }
+          }
+        },
+        "Maestro": {
+          "id": { "type": "number", "primary": true, "generated": true },
+          "estilo": {
+            "type": "enum",
+            "values": ["simples", "elegante"],
+            "required": true
+          },
+          "anos_experiência": { "type": "number", "required": true },
+          "nacionalidade": {
+            "type": "enum",
+            "values": ["brasileiro", "estrangeiro"],
+            "required": true
+          },
+          "relationships": {
+            "usuário": { "type": "OneToOne", "cascade": true },
+            "peças_musicais": { "type": "OneToMany" }
+          }
+        },
+        "Patrocinador": {
+          "id": { "type": "number", "primary": true, "generated": true },
+          "empresa": { "type": "string", "required": true },
+          "telefone": { "type": "string", "required": true },
+          "relationships": {
+            "usuário": { "type": "OneToOne", "cascade": true },
+            "patrocínios": { "type": "OneToMany" }
+          }
+        },
+        "PecaMusical": {
+          "id": { "type": "number", "primary": true, "generated": true },
+          "título": { "type": "string", "required": true },
+          "duração": { "type": "number", "required": true },
+          "tom": { "type": "string", "required": true },
+          "gênero": {
+            "type": "enum",
+            "values": ["clássico", "pop", "rock"],
+            "required": true
+          },
+          "internacional": { "type": "boolean", "required": true },
+          "relationships": {
+            "maestro": { "type": "ManyToOne", "cascade": true },
+            "patrocínios": { "type": "OneToMany" }
+          }
+        },
+        "Patrocinio": {
+          "id": { "type": "number", "primary": true, "generated": true },
+          "orçamento_disponível": { "type": "number", "required": true },
+          "data_proposta": { "type": "timestamp", "auto": true },
+          "show_exposicao": { "type": "boolean", "required": true },
+          "relationships": {
+            "peça_musical": { "type": "ManyToOne", "cascade": true },
+            "patrocinador": { "type": "ManyToOne", "cascade": true }
+          }
+        }
+      }
+    },
+    "autenticacao": {
+      "jwt": true,
+      "middlewares": [
+        "verificar-token",
+        "verificar-perfil-maestro",
+        "verificar-perfil-patrocinador",
+        "verificar-erro-conteúdo-token"
+      ],
+      "hash_senha": "bcrypt"
+    },
+    "endpoints": {
+      "usuarios": [
+        {
+          "route": "/api/usuarios",
+          "method": "POST",
+          "action": "Cadastrar usuário",
+          "middleware": false
+        },
+        {
+          "route": "/api/usuarios/logar",
+          "method": "POST",
+          "action": "Autenticar usuário",
+          "middleware": false
+        },
+        {
+          "route": "/api/usuarios/recuperar-acesso",
+          "method": "POST",
+          "action": "Recuperar acesso por pergunta secreta",
+          "middleware": false
+        }
+      ],
+      "maestros": [
+        {
+          "route": "/api/maestros",
+          "method": "POST",
+          "action": "Cadastrar maestro",
+          "middleware": false
+        },
+        {
+          "route": "/api/maestros/:cpf",
+          "method": "GET",
+          "action": "Buscar maestro por CPF",
+          "middleware": ["verificar-token", "verificar-perfil-maestro"]
+        },
+        {
+          "route": "/api/maestros",
+          "method": "PATCH",
+          "action": "Atualizar dados do maestro",
+          "middleware": ["verificar-token", "verificar-perfil-maestro"]
+        },
+        {
+          "route": "/api/maestros/pecas-musicais",
+          "method": "POST",
+          "action": "Cadastrar peça musical",
+          "middleware": ["verificar-token", "verificar-perfil-maestro"]
+        },
+        {
+          "route": "/api/maestros/pecas-musicais",
+          "method": "PATCH",
+          "action": "Alterar peça musical",
+          "middleware": ["verificar-token", "verificar-perfil-maestro"]
+        },
+        {
+          "route": "/api/maestros/pecas-musicais/:id",
+          "method": "DELETE",
+          "action": "Remover peça musical",
+          "middleware": ["verificar-token", "verificar-perfil-maestro"]
+        },
+        {
+          "route": "/api/maestros/pecas-musicais/maestro/:cpf",
+          "method": "GET",
+          "action": "Buscar peças musicais do maestro",
+          "middleware": ["verificar-token", "verificar-perfil-maestro"]
+        },
+        {
+          "route": "/api/maestros/pecas-musicais/patrocinios",
+          "method": "GET",
+          "action": "Buscar patrocínios das peças musicais",
+          "middleware": ["verificar-token", "verificar-perfil-maestro"]
+        },
+        {
+          "route": "/api/maestros/pecas-musicais/:id/patrocinios",
+          "method": "GET",
+          "action": "Buscar patrocínios de peça específica",
+          "middleware": false
+        }
+      ],
+      "patrocinadores": [
+        {
+          "route": "/api/patrocinadores",
+          "method": "POST",
+          "action": "Cadastrar patrocinador",
+          "middleware": false
+        },
+        {
+          "route": "/api/patrocinadores/:cpf",
+          "method": "GET",
+          "action": "Buscar patrocinador por CPF",
+          "middleware": ["verificar-token", "verificar-perfil-patrocinador"]
+        },
+        {
+          "route": "/api/patrocinadores",
+          "method": "PATCH",
+          "action": "Atualizar dados do patrocinador",
+          "middleware": ["verificar-token", "verificar-perfil-patrocinador"]
+        },
+        {
+          "route": "/api/patrocinadores/patrocinios",
+          "method": "POST",
+          "action": "Cadastrar patrocínio",
+          "middleware": ["verificar-token", "verificar-perfil-patrocinador"]
+        },
+        {
+          "route": "/api/patrocinadores/patrocinios",
+          "method": "PATCH",
+          "action": "Alterar patrocínio",
+          "middleware": ["verificar-token", "verificar-perfil-patrocinador"]
+        },
+        {
+          "route": "/api/patrocinadores/patrocinios/:id",
+          "method": "DELETE",
+          "action": "Remover patrocínio",
+          "middleware": ["verificar-token", "verificar-perfil-patrocinador"]
+        },
+        {
+          "route": "/api/patrocinadores/patrocinios/patrocinador/:cpf",
+          "method": "GET",
+          "action": "Buscar patrocínios do patrocinador",
+          "middleware": ["verificar-token", "verificar-perfil-patrocinador"]
+        }
+      ]
+    },
+    "dependencias": {
+      "principais": [
+        "express",
+        "typeorm",
+        "bcrypt",
+        "jsonwebtoken",
+        "cors",
+        "mysql2",
+        "pg",
+        "reflect-metadata"
+      ],
+      "desenvolvimento": [
+        "typescript",
+        "ts-node",
+        "nodemon",
+        "tsconfig-paths",
+        "concurrently"
+      ]
+    },
+    "configuracao": {
+      "typescript": true,
+      "ambiente_variaveis": [
+        "TYPEORM_TYPE",
+        "TYPEORM_HOST",
+        "TYPEORM_PORT",
+        "TYPEORM_USERNAME",
+        "TYPEORM_PASSWORD",
+        "TYPEORM_DATABASE"
+      ],
+      "sincronizacao_bd": true,
+      "logging": ["info"]
+    }
+  },
+  "recursos_especiais": {
+    "internacionalizacao": {
+      "arquivo": "português.json",
+      "suporte_multiplos_idiomas": false
+    },
+    "validacoes": {
+      "cpf": true,
+      "email": true,
+      "senhas": true,
+      "mascaras_input": true
+    },
+    "utilitarios": {
+      "toast_notificacoes": true,
+      "formatacao_perfil": true,
+      "estilos_dinamicos": true,
+      "mascaras_telefone_cpf": true
+    },
+    "responsividade": {
+      "mobile_first": true,
+      "breakpoints": { "desktop": "991px" },
+      "menu_adaptativo": true
+    }
+  },
+  "arquitetura": {
+    "padrao": "MVC com separação clara de responsabilidades",
+    "frontend": {
+      "contextos_react": true,
+      "roteamento_protegido": true,
+      "componentes_reutilizaveis": true
+    },
+    "backend": {
+      "middlewares_autenticacao": true,
+      "separacao_rotas_servicos": true,
+      "orm_typeorm": true
+    },
+    "comunicacao": {
+      "rest_api": true,
+      "axios_frontend": true,
+      "cors_habilitado": true
+    }
+  }
+}
