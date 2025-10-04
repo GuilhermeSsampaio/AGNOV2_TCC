@@ -3,8 +3,6 @@ import logging
 from pathlib import Path
 from threading import Event
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-
 def parse_json_task(input_path: Path, ready_event: Event, shared: dict):
     """Thread task: parse input JSON and populate shared dict."""
     logging.info("Parsing JSON (task module)...")

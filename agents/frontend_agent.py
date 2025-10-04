@@ -9,7 +9,7 @@ from utils.buffered_file_tools import BufferedFileTools
 # from database.manage_context import context_base
 # Define o caminho do projeto usando timestamp
 PROJECT_PATH = Path(f"{project_path}")
-frontend_file_tools = BufferedFileTools(base_dir=PROJECT_PATH)
+frontend_file_tools = BufferedFileTools(base_dir=PROJECT_PATH, flush_threshold=10**6)
 
 # Inicializa o modelo Gemini
 gemini_model = Gemini("gemini-2.0-flash")

@@ -11,7 +11,7 @@ backend_instructions = [
     "Implemente um CRUD completo para cada entidade especificada no JSON.",
     "Use TypeORM para gerenciar o banco de dados e configure as entidades no diretorio 'src/entidades/'.",
     "Garanta que todas as rotas sigam o padrao RESTful.",
-    "Mantenha mensagens e codigo em portugues, seguindo o padrao atual do projeto (acentos sao permitidos).",
+    "Mantenha mensagens e codigo em portugues, seguindo o padrao atual do projeto (jamais utilize caracteres especiais tanto no código quanto na interface).",
     "Nao use class validator.",
     "Crie middlewares para tratamento de erros e autenticacao quando necessario.",
     "Fique atento ao importar modulos para usar caminhos relativos corretos.",

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 from pathlib import Path
-from typing import List, Literal, Optional
+from typing import Iterable, List, Literal, Optional
 
 from agno.tools.file import FileTools
 
@@ -94,11 +94,14 @@ class BufferedFileTools(FileTools):
         op = BufferedOperation("mkdir", Path(path), parents=parents)
         return self._schedule(op)
 
-    def flush(self) -> str:
-        if not self._buffer:
-            return "Nenhuma acao pendente."
+    def drain(self) -> List[BufferedOperation]:
+        drained = list(self._buffer)
+        self._buffer.clear()
+        return drained
 
-        for op in self._buffer:
+    def apply(self, operations: Iterable[BufferedOperation]) -> str:
+        applied = 0
+        for op in operations:
             resolved = self._resolve(op.path)
             if op.action == "write":
                 resolved.parent.mkdir(parents=True, exist_ok=True)
@@ -115,10 +118,16 @@ class BufferedFileTools(FileTools):
                     resolved.unlink()
             elif op.action == "mkdir":
                 resolved.mkdir(parents=op.parents, exist_ok=True)
+            applied += 1
 
-        applied = len(self._buffer)
-        self._buffer.clear()
-        return f"Aplicadas {applied} alterações pendentes."
+        return f"Aplicadas {applied} alterações."
+
+    def flush(self) -> str:
+        if not self._buffer:
+            return "Nenhuma acao pendente."
+
+        operations = self.drain()
+        return self.apply(operations)
 
 
 __all__ = ["BufferedFileTools", "BufferedOperation"]

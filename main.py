@@ -1,11 +1,13 @@
 import argparse
 import json
 import logging
+import os
+import atexit
 from pathlib import Path
 from threading import Thread, Event
 from tasks.parse_task import parse_json_task
 from tasks.setup_task import setup_task
-from utils.timestamp_config import project_path
+from utils.timestamp_config import project_path, project_timestamp
 from utils.project_manager import create_project_structure, get_project_readme_content
 from utils.copy_boilerplate import clone_boilerplate
 from agents.frontend_agent import frontend_agent, frontend_file_tools
@@ -14,13 +16,60 @@ import time
 import sys
 import subprocess
 
+SCRIPTS_DIR = Path("scripts")
+PROJECT_DIR = Path(project_path)
+LOG_FILE = PROJECT_DIR / f"execucao_{project_timestamp}.txt"
+LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+
+ORIGINAL_STDOUT = sys.stdout
+ORIGINAL_STDERR = sys.stderr
+
+
+class _StreamToLogger:
+    def __init__(self, logger: logging.Logger, level: int):
+        self.logger = logger
+        self.level = level
+        self._buffer = ""
+
+    def write(self, message: str) -> int:
+        if not message:
+            return 0
+        self._buffer += message
+        while "\n" in self._buffer:
+            line, self._buffer = self._buffer.split("\n", 1)
+            line = line.rstrip()
+            if line:
+                self.logger.log(self.level, line)
+        return len(message)
+
+    def flush(self) -> None:
+        if self._buffer:
+            self.logger.log(self.level, self._buffer.rstrip())
+            self._buffer = ""
+
+    @property
+    def encoding(self) -> str:
+        return "utf-8"
+
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+    force=True,
+    handlers=[
+        logging.StreamHandler(ORIGINAL_STDOUT),
+        logging.FileHandler(LOG_FILE, mode="w", encoding="utf-8"),
+    ],
+)
 
-SCRIPTS_DIR = Path("scripts")
+root_logger = logging.getLogger()
+sys.stdout = _StreamToLogger(root_logger, logging.INFO)
+sys.stderr = _StreamToLogger(root_logger, logging.ERROR)
+logging.captureWarnings(True)
+atexit.register(logging.shutdown)
 
 
 def _run_npm_install(target: Path) -> None:
@@ -72,8 +121,12 @@ def run_agents(shared: dict):
         logging.warning("frontend_agent.run falhou: %s", e)
     finally:
         try:
-            flush_result = frontend_file_tools.flush()
-            logging.info("Frontend buffer: %s", flush_result)
+            frontend_ops = frontend_file_tools.drain()
+            if frontend_ops:
+                result = frontend_file_tools.apply(frontend_ops)
+            else:
+                result = "Nenhuma alteração para aplicar."
+            logging.info("Frontend buffer: %s", result)
         except Exception as flush_error:
             logging.warning("Falha ao aplicar buffer do frontend: %s", flush_error)
 
@@ -86,9 +139,19 @@ def run_agents(shared: dict):
     # Alguns recursos externos (APIs, instalações) podem exigir tempo para
     # estabilizar; adicionamos um delay para reduzir possibilidade de erros
     # por taxa/limitação/consumo rápido de quota.
-    DELAY_SECONDS = 160
-    logging.info("Aguardando %s segundos antes de iniciar o backend...", DELAY_SECONDS)
-    time.sleep(DELAY_SECONDS)
+    delay_env = os.getenv("BACKEND_DELAY_SECONDS")
+    try:
+        delay_seconds = int(delay_env) if delay_env is not None else 160
+    except ValueError:
+        delay_seconds = 160
+        logging.warning(
+            "Valor invalido para BACKEND_DELAY_SECONDS: %s. Usando delay padrao de %s s.",
+            delay_env,
+            delay_seconds,
+        )
+
+    logging.info("Aguardando %s segundos antes de iniciar o backend...", delay_seconds)
+    time.sleep(max(delay_seconds, 0))
 
     # 3) Backend agent
     # O agente backend recebe tanto o `backend_spec` original quanto o
@@ -105,8 +168,12 @@ def run_agents(shared: dict):
         logging.warning("backend_agent.run falhou: %s", e)
     finally:
         try:
-            flush_result = backend_file_tools.flush()
-            logging.info("Backend buffer: %s", flush_result)
+            backend_ops = backend_file_tools.drain()
+            if backend_ops:
+                result = backend_file_tools.apply(backend_ops)
+            else:
+                result = "Nenhuma alteração para aplicar."
+            logging.info("Backend buffer: %s", result)
         except Exception as flush_error:
             logging.warning("Falha ao aplicar buffer do backend: %s", flush_error)
 

@@ -6,8 +6,6 @@ from threading import Event
 from utils.project_manager import create_project_structure
 from utils.copy_boilerplate import clone_boilerplate
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-
 SCRIPTS_DIR = Path("scripts")
 
 
